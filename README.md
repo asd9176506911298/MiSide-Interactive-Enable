@@ -2,7 +2,7 @@
 
 ## Features
 - Activate **Interactive Objects**.
-- Replay **TV Games** seamlessly.
+- Replay TV Games and customize Enemy Difficulty.
 
 ## Default Keybinds
 - **PageUp**: Activate Interactive Objects.  
