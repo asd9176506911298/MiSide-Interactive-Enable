@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
@@ -14,6 +15,12 @@ public class Plugin : BasePlugin
     internal static new ManualLogSource Log;
     internal static Harmony harmony = new Harmony("InteractiveEnable");
 
+    public static ConfigEntry<KeyCode> interactiveKey;
+    public static ConfigEntry<KeyCode> miniGameKey;
+    public static ConfigEntry<KeyCode> hardKey;
+    public static ConfigEntry<KeyCode> weakKey;
+    public static ConfigEntry<KeyCode> showTVHintKey;
+
     public bool isInteractive = false;
     public bool isMiniGame = false;
 
@@ -24,6 +31,13 @@ public class Plugin : BasePlugin
         Log = base.Log;
         Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
         Harmony.DEBUG = true;
+
+        interactiveKey = Config.Bind<KeyCode>("", "InteractiveKey", KeyCode.PageUp, "");
+        miniGameKey = Config.Bind<KeyCode>("", "MiniGameKey", KeyCode.PageDown, "");
+        hardKey = Config.Bind<KeyCode>("", "HardKey", KeyCode.KeypadPlus, "");
+        weakKey = Config.Bind<KeyCode>("", "WeakKey", KeyCode.KeypadMinus, "");
+        showTVHintKey = Config.Bind<KeyCode>("", "ShowTVHintKey", KeyCode.Insert, "");
+
         harmony.PatchAll(typeof(Patch));
 
         // Add the MonoBehaviour that handles Update and Input
@@ -37,13 +51,13 @@ public class Plugin : BasePlugin
             try
             {
                 // Check for specific key presses
-                if (Input.GetKeyDown(KeyCode.F1))
+                if (Input.GetKeyDown(interactiveKey.Value))
                 {
                     Plugin.Instance.isInteractive = !Plugin.Instance.isInteractive;
                     Plugin.Log.LogInfo($"isInteractive: {Plugin.Instance.isInteractive}");
                 }
 
-                if (Input.GetKeyDown(KeyCode.F2))
+                if (Input.GetKeyDown(miniGameKey.Value))
                 {
                     Plugin.Instance.isMiniGame = !Plugin.Instance.isMiniGame;
                     foreach(var x in GameObject.FindObjectsOfType<MT_GameCnowballs>())
@@ -54,7 +68,7 @@ public class Plugin : BasePlugin
                     Plugin.Log.LogInfo($"isMiniGame: {Plugin.Instance.isMiniGame}");
                 }
 
-                if (Input.GetKeyDown(KeyCode.KeypadPlus))
+                if (Input.GetKeyDown(hardKey.Value))
                 {
                     foreach (var x in GameObject.FindObjectsOfType<Location4Fight>())
                     {
@@ -64,12 +78,21 @@ public class Plugin : BasePlugin
                     }
                 }
 
-                if (Input.GetKeyDown(KeyCode.KeypadMinus))
+                if (Input.GetKeyDown(weakKey.Value))
                 {
                     foreach (var x in GameObject.FindObjectsOfType<Location4Fight>())
                     {
                         x.enemyComplexity += 1;
                         Plugin.Log.LogInfo($"enemyComplexity: {x.enemyComplexity}");
+                    }
+                }
+
+                if (Input.GetKeyDown(showTVHintKey.Value))
+                {
+                    foreach (var x in GameObject.FindObjectsOfType<MinigamesTelevisionController>())
+                    {
+                        x.KeysMenuActiveTrue();
+                        Plugin.Log.LogInfo($"KeysMenuActiveTrue");
                     }
                 }
             }

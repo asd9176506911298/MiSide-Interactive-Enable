@@ -30,7 +30,10 @@ namespace InteractiveEnable
             try
             {
                 if (Plugin.Instance.isInteractive)
+                {
+                    __instance.active = true;
                     __instance.dontDestroyAfter = true;
+                }
             }
             catch (Exception ex)
             {
