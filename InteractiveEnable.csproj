@@ -30,6 +30,9 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>assembly-libraries\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>assembly-libraries\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

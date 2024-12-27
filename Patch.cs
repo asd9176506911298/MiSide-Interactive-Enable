@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Playables;
 
 namespace InteractiveEnable
 {
@@ -13,7 +14,8 @@ namespace InteractiveEnable
         {
             try
             {
-                __instance.active = true;
+                if(Plugin.Instance.isInteractive)
+                    __instance.active = true;
             }
             catch (Exception ex)
             {
@@ -27,7 +29,8 @@ namespace InteractiveEnable
         {
             try
             {
-                __instance.dontDestroyAfter = true;
+                if (Plugin.Instance.isInteractive)
+                    __instance.dontDestroyAfter = true;
             }
             catch (Exception ex)
             {
@@ -39,10 +42,13 @@ namespace InteractiveEnable
         [HarmonyPrefix]
         private static void HookMinigamesTelevisionController(MinigamesTelevisionController __instance)
         {
-            __instance.destroyAfter = false;
-            foreach (var x in __instance.games)
+            if (Plugin.Instance.isInteractive)
             {
-                x.playead = false;
+                __instance.destroyAfter = false;
+                foreach (var x in __instance.games)
+                {
+                    x.playead = false;
+                }
             }
         }
 
@@ -50,11 +56,13 @@ namespace InteractiveEnable
         [HarmonyPrefix]
         private static void MT_GameCnowballsStart(MT_GameCnowballs __instance)
         {
-            Plugin.Log.LogInfo($"DMita444: {GameObject.Find("World/Quests/Quest 1/Game Aihastion/Dialogues/Pinguin/Dialogue Start/DMita 4") == null}");
-            if(GameObject.Find("World/Quests/Quest 1/Game Aihastion/Dialogues/Pinguin/Dialogue Start/DMita 4") == null)
+            if (Plugin.Instance.isMiniGame)
             {
-                __instance.PlayTimeStart();
-                Plugin.Log.LogInfo($"PlayTimeStart");
+                if (GameObject.Find("World/Quests/Quest 1/Game Aihastion/Dialogues/Pinguin/Dialogue Start/DMita 4") == null)
+                {
+                    __instance.PlayTimeStart();
+                    Plugin.Log.LogInfo($"PlayTimeStart");
+                }
             }
         }
 
@@ -62,8 +70,68 @@ namespace InteractiveEnable
         [HarmonyPrefix]
         private static void MT_GameCnowballsUpdate(MT_GameCnowballs __instance)
         {
-            if (__instance.resultShow && __instance.resultTimeShow > 10.0f)
-                __instance.Continue();
+            try
+            {
+                if (Plugin.Instance.isMiniGame)
+                {
+                    if (__instance.resultShow && __instance.resultTimeShow > 7.5f)
+                    {
+                        __instance.Continue();
+                    }
+                }
+                else
+                {
+                    // Ensure the games array and its index are valid
+                    if (__instance.gameController.main.games != null && __instance.gameController.main.games.Length > 1)
+                    {
+                        var game = __instance.gameController.main.games[1];
+                        var win = game.countWin;
+                        var lose = game.countLose;
+
+                        if (win + lose >= 2)
+                        {
+                            __instance.countPlayed = 2;
+                            __instance.Continue();
+                        }
+                    }
+                    else
+                    {
+                        Plugin.Log.LogWarning("Games array is null or out of bounds.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Plugin.Log.LogError($"Unexpected exception in MT_GameCnowballsUpdate: {ex.Message}");
+            }
+        }
+
+
+        [HarmonyPatch(typeof(Location4Fight), "Update")]
+        [HarmonyPrefix]
+        private static void Location4FightUpdate(Location4Fight __instance)
+        {
+            if (Plugin.Instance.isMiniGame)
+            {
+                var game = __instance.gameController.main.games[0];
+                var win = game.countWin;
+                var lose = game.countLose;
+                if ((win + lose >= 4) && (__instance.playerMain.health <= 0 || __instance.playerEnemy.health <= 0f || (!__instance.play && !__instance.playEnemy)))
+                {
+                    __instance.Continue();
+                }
+            }
+            else
+            {
+                var game = __instance.gameController.main.games[0];
+                var win = game.countWin;
+                var lose = game.countLose;
+                if ((win + lose >= 4))
+                {
+                    __instance.loseG = 4;
+                    __instance.Continue();
+                }
+            }
         }
     }
 }
