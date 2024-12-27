@@ -48,7 +48,7 @@ namespace InteractiveEnable
 
         [HarmonyPatch(typeof(MT_GameCnowballs), "Start")]
         [HarmonyPrefix]
-        private static void HookStart(MT_GameCnowballs __instance)
+        private static void MT_GameCnowballsStart(MT_GameCnowballs __instance)
         {
             Plugin.Log.LogInfo($"DMita444: {GameObject.Find("World/Quests/Quest 1/Game Aihastion/Dialogues/Pinguin/Dialogue Start/DMita 4") == null}");
             if(GameObject.Find("World/Quests/Quest 1/Game Aihastion/Dialogues/Pinguin/Dialogue Start/DMita 4") == null)
@@ -58,42 +58,12 @@ namespace InteractiveEnable
             }
         }
 
-        [HarmonyPatch(typeof(MinigamesTelevisionGame), "GameLose")]
+        [HarmonyPatch(typeof(MT_GameCnowballs), "Update")]
         [HarmonyPrefix]
-        private static void HookGameLose(MinigamesTelevisionGame __instance, UnityAction call)
+        private static void MT_GameCnowballsUpdate(MT_GameCnowballs __instance)
         {
-            try
-            {
-                if(__instance != null)
-                    if(__instance.objectGame.GetComponent<MT_GameCnowballs>() != null)
-                    {
-                        Plugin.Log.LogInfo($"Tsetest: {__instance.objectGame.GetComponent<MT_GameCnowballs>().countPlayed}");
-                        if(__instance.objectGame.GetComponent<MT_GameCnowballs>().countPlayed >= 2)
-                            __instance.ExitGame();
-                        Plugin.Log.LogInfo("GameLose ExitGame.");
-                    }
-                        
-            }
-            catch (Exception ex)
-            {
-                Plugin.Log.LogError($"Error in GameLose: {ex.Message}");
-            }
-        }
-
-        [HarmonyPatch(typeof(MinigamesTelevisionGame), "GameWin")]
-        [HarmonyPrefix]
-        private static void HookGameWin(MinigamesTelevisionGame __instance, UnityAction call)
-        {
-            try
-            {
-                // Safely calling ExitGame() and logging
-                __instance.ExitGame();
-                Plugin.Log.LogInfo("GameWin ExitGame.");
-            }
-            catch (Exception ex)
-            {
-                Plugin.Log.LogError($"Error in GameWin: {ex.Message}");
-            }
+            if (__instance.resultShow && __instance.resultTimeShow > 10.0f)
+                __instance.Continue();
         }
     }
 }
