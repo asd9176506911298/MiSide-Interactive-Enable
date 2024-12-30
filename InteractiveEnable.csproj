@@ -24,6 +24,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>assembly-libraries\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>assembly-libraries\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
     <Reference Include="Il2Cppmscorlib">
       <HintPath>assembly-libraries\Il2Cppmscorlib.dll</HintPath>
     </Reference>

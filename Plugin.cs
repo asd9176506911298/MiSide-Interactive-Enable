@@ -3,7 +3,7 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
-using Il2CppInterop.Runtime.Injection;
+using System;
 using UnityEngine;
 
 namespace InteractiveEnable;
@@ -31,6 +31,8 @@ public class Plugin : BasePlugin
         Log = base.Log;
         Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
         Harmony.DEBUG = true;
+
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
 
         interactiveKey = Config.Bind<KeyCode>("", "InteractiveKey", KeyCode.PageUp, "");
         miniGameKey = Config.Bind<KeyCode>("", "MiniGameKey", KeyCode.PageDown, "");
@@ -70,20 +72,38 @@ public class Plugin : BasePlugin
 
                 if (Input.GetKeyDown(hardKey.Value))
                 {
-                    foreach (var x in GameObject.FindObjectsOfType<Location4Fight>())
+                    //foreach (var x in GameObject.FindObjectsOfType<Location4Fight>())
+                    //{
+                    //    if (x.enemyComplexity > 0)
+                    //        x.enemyComplexity -= 1;
+                    //    Plugin.Log.LogInfo($"enemyComplexity: {x.enemyComplexity}");
+                    //}
+
+                    foreach (var x in GameObject.FindObjectsOfType<Location7_GameDance>())
                     {
-                        if (x.enemyComplexity > 0)
-                            x.enemyComplexity -= 1;
-                        Plugin.Log.LogInfo($"enemyComplexity: {x.enemyComplexity}");
+                        if (x.musicIndexPlay >= 0 && x.musicIndexPlay < 2)
+                            x.musicIndexPlay += 1;
+
+                        x.ChangeMusic();
+                        Plugin.Log.LogInfo($"musicName: {GlobalLanguage.GetString("Location 7", x.musicIndexPlay + 1)}");
                     }
                 }
 
                 if (Input.GetKeyDown(weakKey.Value))
                 {
-                    foreach (var x in GameObject.FindObjectsOfType<Location4Fight>())
+                    //foreach (var x in GameObject.FindObjectsOfType<Location4Fight>())
+                    //{
+                    //    x.enemyComplexity += 1;
+                    //    Plugin.Log.LogInfo($"enemyComplexity: {x.enemyComplexity}");
+                    //}
+
+                    foreach (var x in GameObject.FindObjectsOfType<Location7_GameDance>())
                     {
-                        x.enemyComplexity += 1;
-                        Plugin.Log.LogInfo($"enemyComplexity: {x.enemyComplexity}");
+                        if (x.musicIndexPlay > 0 && x.musicIndexPlay <= 2)
+                            x.musicIndexPlay -= 1;
+
+                        x.ChangeMusic();
+                        Plugin.Log.LogInfo($"musicName: {GlobalLanguage.GetString("Location 7", x.musicIndexPlay + 1)}");
                     }
                 }
 
@@ -94,7 +114,56 @@ public class Plugin : BasePlugin
                         x.KeysMenuActiveTrue();
                         Plugin.Log.LogInfo($"KeysMenuActiveTrue");
                     }
+
+                    foreach (var x in GameObject.FindObjectsOfType<Location7_GameDance>())
+                    {
+                        x.eventFinishPlayer.Invoke();
+                        if (x.indexFinishMita >= 3)
+                        {
+                            GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Игры/Dance/Interactive DanceStart/Canvas").GetComponent<ObjectInteractive_CaseInfo>().dontDestroyAfter = true;
+                            GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Игры/Dance/Interactive DanceStart").GetComponent<ObjectInteractive>().active = true;
+                        }
+                        Plugin.Log.LogInfo($"DanceGame eventFinishPlayer");
+                    }
                 }
+
+# if DEBUG
+                if (Input.GetKeyDown(KeyCode.Delete))
+                {
+                    GameObject quest4 = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой");
+                    if (quest4 != null) quest4.SetActive(true);
+
+                    GameObject quest4Interactive = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Интерактивы");
+                    if (quest4Interactive != null) quest4Interactive.SetActive(true);
+
+                    GameObject quest4HouseMain = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/House/Main");
+                    if (quest4HouseMain != null) quest4HouseMain.SetActive(true);
+
+                    GameObject actMitaKepka = GameObject.Find("World/Acts/Mita Кепка");
+                    if (actMitaKepka != null) actMitaKepka.SetActive(true);
+
+                    GameObject interactiveDance = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Интерактивы/Interactive Dance");
+                    if (interactiveDance != null)
+                    {
+                        ObjectInteractive danceObjectInteractive = interactiveDance.GetComponent<ObjectInteractive>();
+                        if (danceObjectInteractive != null) danceObjectInteractive.active = true;
+                    }
+
+                    GlobalTag.player.transform.position = new Vector3(-18.63f, 0f, -1.47f);
+
+                    GameObject interactiveDoor = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Интерактивы/Interactive Door");
+                    if (interactiveDoor != null)
+                    {
+                        ObjectInteractive doorObjectInteractive = interactiveDoor.GetComponent<ObjectInteractive>();
+                        if (doorObjectInteractive != null)
+                        {
+                            doorObjectInteractive.active = true;
+                            //doorObjectInteractive.Click();
+                        }
+                    }
+
+                }
+# endif
             }
             catch (System.Exception ex)
             {

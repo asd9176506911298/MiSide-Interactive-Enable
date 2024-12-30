@@ -1,8 +1,7 @@
 ﻿using HarmonyLib;
 using System;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Playables;
+
 
 namespace InteractiveEnable
 {
@@ -14,8 +13,11 @@ namespace InteractiveEnable
         {
             try
             {
-                if(Plugin.Instance.isInteractive)
-                    __instance.active = true;
+                if (Plugin.Instance.isInteractive)
+                {
+                    if(__instance.name != "Interactive Dance")
+                        __instance.active = true;
+                }
             }
             catch (Exception ex)
             {
@@ -135,6 +137,52 @@ namespace InteractiveEnable
                     __instance.Continue();
                 }
             }
+        }
+
+        [HarmonyPatch(typeof(Location7_GameDance), "RestartDataSpheres")]
+        [HarmonyPrefix]
+        private static void Location7_GameDanceRestartDataSpheres(Location7_GameDance __instance)
+        {
+            if (__instance.indexFinishMita >= 3)
+            {
+                __instance.eventFinishPlayer.Invoke();
+                GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Игры/Dance/Interactive DanceStart/Canvas").GetComponent<ObjectInteractive_CaseInfo>().dontDestroyAfter = true;
+                GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Игры/Dance/Interactive DanceStart").GetComponent<ObjectInteractive>().active = true;
+            }
+
+            GameObject gameObject = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Игры/Dance/CanvasGameDance/Screen/Game");
+            if (gameObject != null)
+            {
+                // Iterate over the children and check the type before casting
+                foreach (Transform child in gameObject.transform)  // Iterate over Transform components
+                {
+                    var rectTransformChild = child as RectTransform;  // Safe casting to RectTransform
+                    if (rectTransformChild != null)
+                    {
+                        Plugin.Log.LogInfo($"Child: {rectTransformChild.name}");
+
+                        if (rectTransformChild.name == "Sphere(Clone)")
+                        {
+                            Plugin.Log.LogInfo($"Destroy: {"GOOOOOOOOOOOOOOOD"}");
+                            // Destroy the GameObject of the child
+                            UnityEngine.Object.Destroy(rectTransformChild.gameObject);
+                        }
+                    }
+                }
+            }
+
+        }
+
+        [HarmonyPatch(typeof(Location7_GameDance), "EndGame")]
+        [HarmonyPrefix]
+        private static bool Location7_GameDanceEndGame(Location7_GameDance __instance)
+        {
+            //__instance.eventFinishPlayer.Invoke();
+            //__instance.transform.parent.gameObject.SetActive(false);
+            __instance.screenNextStart = false;
+            //__instance.indexScreenGame = 0;
+
+            return false;
         }
     }
 }
