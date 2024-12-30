@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using System;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 namespace InteractiveEnable
 {
@@ -145,32 +145,19 @@ namespace InteractiveEnable
         {
             if (__instance.indexFinishMita >= 3)
             {
-                __instance.eventFinishPlayer.Invoke();
+                __instance.indexDialogue = 0;
+                //__instance.eventFinishPlayer.Invoke();
                 GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Игры/Dance/Interactive DanceStart/Canvas").GetComponent<ObjectInteractive_CaseInfo>().dontDestroyAfter = true;
                 GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Игры/Dance/Interactive DanceStart").GetComponent<ObjectInteractive>().active = true;
             }
 
-            GameObject gameObject = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Игры/Dance/CanvasGameDance/Screen/Game");
-            if (gameObject != null)
-            {
-                // Iterate over the children and check the type before casting
-                foreach (Transform child in gameObject.transform)  // Iterate over Transform components
-                {
-                    var rectTransformChild = child as RectTransform;  // Safe casting to RectTransform
-                    if (rectTransformChild != null)
-                    {
-                        Plugin.Log.LogInfo($"Child: {rectTransformChild.name}");
-
-                        if (rectTransformChild.name == "Sphere(Clone)")
-                        {
-                            Plugin.Log.LogInfo($"Destroy: {"GOOOOOOOOOOOOOOOD"}");
-                            // Destroy the GameObject of the child
-                            UnityEngine.Object.Destroy(rectTransformChild.gameObject);
-                        }
-                    }
-                }
-            }
-
+            //foreach(var x in GameObject.FindObjectsOfType<Shadow>())
+            //{
+            //    if(x.name == "Sphere(Clone)")
+            //    {
+            //        Plugin.Log.LogError($"GODDDDDD");
+            //    }
+            //}
         }
 
         [HarmonyPatch(typeof(Location7_GameDance), "EndGame")]
