@@ -25,8 +25,12 @@ public class Plugin : BasePlugin
     public static ConfigEntry<KeyCode> weakKey;
     public static ConfigEntry<KeyCode> showTVHintKey;
 
-    public bool isInteractive = false;
-    public bool isMiniGame = false;
+    public static ConfigEntry<bool> isInteractive;
+    public static ConfigEntry<bool> isMiniGame;
+    public static ConfigEntry<bool> isOpenDoor;
+
+    //public bool isInteractive = false;
+    //public bool isMiniGame = false;
 
     public override void Load()
     {
@@ -42,6 +46,10 @@ public class Plugin : BasePlugin
         hardKey = Config.Bind<KeyCode>("", "HardKey", KeyCode.KeypadPlus, "");
         weakKey = Config.Bind<KeyCode>("", "WeakKey", KeyCode.KeypadMinus, "");
         showTVHintKey = Config.Bind<KeyCode>("", "ShowTVHintKey", KeyCode.Insert, "");
+
+        isInteractive = Config.Bind<bool>("", "IsInteractive", false, "");
+        isMiniGame = Config.Bind<bool>("", "IsMiniGame", false, "");
+        isOpenDoor = Config.Bind<bool>("", "IsOpenDoor", false, "");
 
         harmony.PatchAll(typeof(Patch));
 

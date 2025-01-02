@@ -13,7 +13,7 @@ namespace InteractiveEnable
         {
             try
             {
-                if (Plugin.Instance.isInteractive)
+                if (Plugin.isInteractive.Value)
                 {
                     if(__instance.name != "Interactive Dance")
                         __instance.active = true;
@@ -31,7 +31,7 @@ namespace InteractiveEnable
         {
             try
             {
-                if (Plugin.Instance.isInteractive)
+                if (Plugin.isInteractive.Value)
                 {
                     __instance.active = true;
                     __instance.dontDestroyAfter = true;
@@ -47,7 +47,7 @@ namespace InteractiveEnable
         [HarmonyPrefix]
         private static void HookMinigamesTelevisionController(MinigamesTelevisionController __instance)
         {
-            if (Plugin.Instance.isInteractive)
+            if (Plugin.isInteractive.Value)
             {
                 __instance.destroyAfter = false;
                 foreach (var x in __instance.games)
@@ -61,7 +61,7 @@ namespace InteractiveEnable
         [HarmonyPrefix]
         private static void MT_GameCnowballsStart(MT_GameCnowballs __instance)
         {
-            if (Plugin.Instance.isMiniGame)
+            if (Plugin.isMiniGame.Value)
             {
                 if (GameObject.Find("World/Quests/Quest 1/Game Aihastion/Dialogues/Pinguin/Dialogue Start/DMita 4") == null)
                 {
@@ -77,7 +77,7 @@ namespace InteractiveEnable
         {
             try
             {
-                if (Plugin.Instance.isMiniGame)
+                if (Plugin.isMiniGame.Value)
                 {
                     if (__instance.resultShow && __instance.resultTimeShow > 7.5f)
                     {
@@ -116,7 +116,7 @@ namespace InteractiveEnable
         [HarmonyPrefix]
         private static void Location4FightUpdate(Location4Fight __instance)
         {
-            if (Plugin.Instance.isMiniGame)
+            if (Plugin.isMiniGame.Value)
             {
                 var game = __instance.gameController.main.games[0];
                 var win = game.countWin;
@@ -170,6 +170,16 @@ namespace InteractiveEnable
             //__instance.indexScreenGame = 0;
 
             return false;
+        }
+
+        [HarmonyPatch(typeof(ObjectDoor), "Update")]
+        [HarmonyPrefix]
+        private static bool PatchObjectDoor(ObjectDoor __instance)
+        {
+            if(Plugin.isOpenDoor.Value)
+                __instance.Lock(false);
+
+            return true;
         }
     }
 }
