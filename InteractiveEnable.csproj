@@ -276,6 +276,9 @@
     <Reference Include="UnityEngine.XRModule">
       <HintPath>assembly-libraries\UnityEngine.XRModule.dll</HintPath>
     </Reference>
+    <Reference Include="UniverseLib.BIE.IL2CPP.Interop">
+      <HintPath>UserLibs\UniverseLib.BIE.IL2CPP.Interop.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
