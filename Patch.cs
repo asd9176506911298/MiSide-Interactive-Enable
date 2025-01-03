@@ -143,14 +143,16 @@ namespace InteractiveEnable
         [HarmonyPrefix]
         private static void Location7_GameDanceRestartDataSpheres(Location7_GameDance __instance)
         {
-            if (__instance.indexFinishMita >= 3)
+            if (Plugin.isMiniGame.Value)
             {
-                __instance.indexDialogue = 0;
-                //__instance.eventFinishPlayer.Invoke();
-                GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Игры/Dance/Interactive DanceStart/Canvas").GetComponent<ObjectInteractive_CaseInfo>().dontDestroyAfter = true;
-                GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Игры/Dance/Interactive DanceStart").GetComponent<ObjectInteractive>().active = true;
+                if (__instance.indexFinishMita >= 3)
+                {
+                    __instance.indexDialogue = 0;
+                    //__instance.eventFinishPlayer.Invoke();
+                    GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Игры/Dance/Interactive DanceStart/Canvas").GetComponent<ObjectInteractive_CaseInfo>().dontDestroyAfter = true;
+                    GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Игры/Dance/Interactive DanceStart").GetComponent<ObjectInteractive>().active = true;
+                }
             }
-
             //foreach(var x in GameObject.FindObjectsOfType<Shadow>())
             //{
             //    if(x.name == "Sphere(Clone)")
@@ -166,7 +168,10 @@ namespace InteractiveEnable
         {
             //__instance.eventFinishPlayer.Invoke();
             //__instance.transform.parent.gameObject.SetActive(false);
-            __instance.screenNextStart = false;
+            if (Plugin.isMiniGame.Value)
+            {
+                __instance.screenNextStart = false;
+            }
             //__instance.indexScreenGame = 0;
 
             return false;

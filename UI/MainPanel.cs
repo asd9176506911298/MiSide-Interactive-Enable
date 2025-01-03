@@ -26,21 +26,26 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         CreateInteractiveEnableToggle();
         CreateMiniGameToggle();
         CreateOpenDoorToggle();
+
         CreateTVGameButton();
+        CreateDifficultButton();
+
         CreateDanceCarGameButton();
+        CreateChangeMusicButton();
+        CreateExitDanceButton();
+
         CreateGlitchGameButton();
 
 
-        CreateDifficultButton();
-        CreateChangeMusicButton();
-        CreateExitDanceButton();
+        
+        
         Owner.Enabled = false;
     }
 
     private void CreateExitDanceButton()
     {
         var exitDance = UIFactory.CreateButton(ContentRoot, "DanceGameExitButton", "Exit Dance Game", null);
-        UIFactory.SetLayoutElement(exitDance.Component.gameObject, minHeight: 25, minWidth: 200);
+        UIFactory.SetLayoutElement(exitDance.Component.gameObject, minHeight: 25, minWidth: 300);
         Text nameLabel = exitDance.Component.GetComponentInChildren<Text>();
         nameLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
         nameLabel.alignment = TextAnchor.MiddleLeft;
@@ -185,7 +190,7 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
     private void CreateTVGameButton()
     {
         var tpDance = UIFactory.CreateButton(ContentRoot, "DanceGameButton", "Teleport TV Game", null);
-        UIFactory.SetLayoutElement(tpDance.Component.gameObject, minHeight: 25, minWidth: 200);
+        UIFactory.SetLayoutElement(tpDance.Component.gameObject, minHeight: 25, minWidth: 300);
         Text nameLabel = tpDance.Component.GetComponentInChildren<Text>();
         nameLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
         nameLabel.alignment = TextAnchor.MiddleLeft;
@@ -214,7 +219,7 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
     private void CreateGlitchGameButton()
     {
         var tpGlitch = UIFactory.CreateButton(ContentRoot, "GlitchGameButton", "Teleport Glitch Game", null);
-        UIFactory.SetLayoutElement(tpGlitch.Component.gameObject, minHeight: 25, minWidth: 200);
+        UIFactory.SetLayoutElement(tpGlitch.Component.gameObject, minHeight: 25, minWidth: 300);
         Text nameLabel = tpGlitch.Component.GetComponentInChildren<Text>();
         nameLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
         nameLabel.alignment = TextAnchor.MiddleLeft;
@@ -252,8 +257,8 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
 
     private void CreateDanceCarGameButton()
     {
-        var tpDance = UIFactory.CreateButton(ContentRoot, "DanceGameButton", "Teleport Dance/Car Game", null);
-        UIFactory.SetLayoutElement(tpDance.Component.gameObject, minHeight: 25, minWidth: 200);
+        var tpDance = UIFactory.CreateButton(ContentRoot, "DanceGameButton", "Teleport Dance/Car/Hammer Game", null);
+        UIFactory.SetLayoutElement(tpDance.Component.gameObject, minHeight: 25, minWidth: 300);
         Text nameLabel = tpDance.Component.GetComponentInChildren<Text>();
         nameLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
         nameLabel.alignment = TextAnchor.MiddleLeft;
@@ -313,6 +318,7 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         carGame.transform.position = new Vector3(-0.81f, 0f, -13.59f);
         carGame.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 
+        GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Интерактивы/Interactive ButtonHummer").GetComponent<ObjectInteractive>().active = true;
     }
 
     private void CreateOpenDoorToggle()
