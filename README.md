@@ -7,9 +7,9 @@
 - Keybinds can be customized in:
 BepInEx\config\InteractiveEnable.cfg
 
-## TV Game
+## Game
 - Replay TV Game Fight Penguin Need to Toggle InteractiveEnable and TV/Dance Game Infinite
-
+- Dance Music End Change Music is better than when music playing still can change music
 
 ## Features
 - F3 Show Menu
