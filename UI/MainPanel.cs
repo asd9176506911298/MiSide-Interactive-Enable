@@ -305,8 +305,14 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
             }
         }
 
-        GameObject.Find("World/House/Backrooms First/Game SpaceCar").SetActive(true);
-        GameObject.Find("World/House/Backrooms First/Game SpaceCar").transform.position = new Vector3(-0.81f, 0f, -13.59f);
+        //GameObject.Find("World/House/Backrooms First/Game SpaceCar").SetActive(true);
+        //GameObject.Find("World/House/Backrooms First/Game SpaceCar").transform.position = new Vector3(-0.81f, 0f, -13.59f);
+
+        var carGame = UnityEngine.GameObject.Instantiate(GameObject.Find("World/House/Backrooms First/Game SpaceCar"));
+        carGame.SetActive(true);
+        carGame.transform.position = new Vector3(-0.81f, 0f, -13.59f);
+        carGame.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+
     }
 
     private void CreateOpenDoorToggle()
