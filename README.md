@@ -15,7 +15,7 @@ BepInEx\config\InteractiveEnable.cfg
 - 重玩 奶盒 企鵝 需要開啟 InteractiveEnable 和 TV/Dance Game Infinite
 - 播放音樂時可以更換音樂，但建議音樂結束後更換音樂更好
 
-## Features
+## Features / 功能
 - F3 Show Menu / F3 顯示選單
 - Activate Interactive Objects / 啟用物件
 - Replay TV Games and customize Fight Enemy Difficulty. / 重玩奶盒企鵝遊戲 調整奶盒敵人強度
