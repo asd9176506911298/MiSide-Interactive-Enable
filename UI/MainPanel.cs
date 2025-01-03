@@ -198,7 +198,7 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         if (SceneManager.GetActiveScene().name != "Scene 4 - StartSecret")
         {
             if (SceneManager.GetActiveScene().name != "SceneMenu")
-                SceneManager.LoadSceneAsync("Scene 4 - StartSecret", LoadSceneMode.Single);
+                SceneManager.LoadScene("Scene 4 - StartSecret", LoadSceneMode.Single);
 
             if (GameObject.Find("MenuGame") != null)
                 GameObject.Find("MenuGame").GetComponent<Menu>().ButtonLoadScene("Scene 4 - StartSecret");
@@ -226,7 +226,7 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         if (SceneManager.GetActiveScene().name != "Scene 19 - Glasses")
         {
             if (SceneManager.GetActiveScene().name != "SceneMenu")
-                SceneManager.LoadSceneAsync("Scene 19 - Glasses", LoadSceneMode.Single);
+                SceneManager.LoadScene("Scene 19 - Glasses", LoadSceneMode.Single);
 
             if (GameObject.Find("MenuGame") != null)
                 GameObject.Find("MenuGame").GetComponent<Menu>().ButtonLoadScene("Scene 19 - Glasses");
@@ -266,7 +266,7 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         if (SceneManager.GetActiveScene().name != "Scene 7 - Backrooms")
         {
             if(SceneManager.GetActiveScene().name != "SceneMenu")
-                SceneManager.LoadSceneAsync("Scene 7 - Backrooms", LoadSceneMode.Single);
+                SceneManager.LoadScene("Scene 7 - Backrooms", LoadSceneMode.Single);
 
             if (GameObject.Find("MenuGame") != null)
                 GameObject.Find("MenuGame").GetComponent<Menu>().ButtonLoadScene("Scene 7 - Backrooms");
