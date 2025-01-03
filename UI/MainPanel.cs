@@ -30,6 +30,7 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         CreateOpenDoorToggle();
 
         CreateTVGameButton();
+        CreateTVHintButton();
         CreateDifficultButton();
 
         CreateDanceCarGameButton();
@@ -43,6 +44,25 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         CreateOHKToggle();
 
         Owner.Enabled = false;
+    }
+
+    private void CreateTVHintButton()
+    {
+        var TVHintButton = UIFactory.CreateButton(ContentRoot, "TVHintButton", "TV Game Didn't Hint Key Click Me", null);
+        UIFactory.SetLayoutElement(TVHintButton.Component.gameObject, minHeight: 25, minWidth: 300);
+        Text nameLabel = TVHintButton.Component.GetComponentInChildren<Text>();
+        nameLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        nameLabel.alignment = TextAnchor.MiddleLeft;
+        TVHintButton.OnClick += ShowTVHint;
+    }
+
+    private void ShowTVHint()
+    {
+        foreach (var x in GameObject.FindObjectsOfType<MinigamesTelevisionController>())
+        {
+            x.KeysMenuActiveTrue();
+            Plugin.Log.LogInfo($"KeysMenuActiveTrue");
+        }
     }
 
     private void CreateInvincibleToggle()

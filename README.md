@@ -1,7 +1,12 @@
 # InteractiveEnable
 
 ## Installation
-- Put dll into BepinEx/Plugins/InteractiveEnable.dll
+- Unzip the contents of the archive into the game folder
+
+## Custom Keybinds
+- Keybinds can be customized in:
+BepInEx\config\InteractiveEnable.cfg
+
 
 ## Features
 - Activate **Interactive Objects**.

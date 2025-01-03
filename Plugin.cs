@@ -19,11 +19,13 @@ public class Plugin : BasePlugin
     internal static new ManualLogSource Log;
     internal static Harmony harmony = new Harmony("InteractiveEnable");
 
-    public static ConfigEntry<KeyCode> interactiveKey;
-    public static ConfigEntry<KeyCode> miniGameKey;
-    public static ConfigEntry<KeyCode> hardKey;
-    public static ConfigEntry<KeyCode> weakKey;
-    public static ConfigEntry<KeyCode> showTVHintKey;
+    //public static ConfigEntry<KeyCode> interactiveKey;
+    //public static ConfigEntry<KeyCode> miniGameKey;
+    //public static ConfigEntry<KeyCode> hardKey;
+    //public static ConfigEntry<KeyCode> weakKey;
+    //public static ConfigEntry<KeyCode> showTVHintKey;
+
+    public ConfigEntry<KeyCode> ShowMenuKey;
 
     public ConfigEntry<bool> isInteractive;
     public ConfigEntry<bool> isMiniGame;
@@ -43,11 +45,13 @@ public class Plugin : BasePlugin
 
         Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-        interactiveKey = Config.Bind<KeyCode>("", "InteractiveKey", KeyCode.PageUp, "");
-        miniGameKey = Config.Bind<KeyCode>("", "MiniGameKey", KeyCode.PageDown, "");
-        hardKey = Config.Bind<KeyCode>("", "HardKey", KeyCode.KeypadPlus, "");
-        weakKey = Config.Bind<KeyCode>("", "WeakKey", KeyCode.KeypadMinus, "");
-        showTVHintKey = Config.Bind<KeyCode>("", "ShowTVHintKey", KeyCode.Insert, "");
+        //interactiveKey = Config.Bind<KeyCode>("", "InteractiveKey", KeyCode.PageUp, "");
+        //miniGameKey = Config.Bind<KeyCode>("", "MiniGameKey", KeyCode.PageDown, "");
+        //hardKey = Config.Bind<KeyCode>("", "HardKey", KeyCode.KeypadPlus, "");
+        //weakKey = Config.Bind<KeyCode>("", "WeakKey", KeyCode.KeypadMinus, "");
+        //showTVHintKey = Config.Bind<KeyCode>("", "ShowTVHintKey", KeyCode.Insert, "");
+
+        ShowMenuKey = Config.Bind<KeyCode>("", "ShowMenuKey", KeyCode.F3, "");
 
         isInteractive = Config.Bind<bool>("", "IsInteractive", false, "");
         isMiniGame = Config.Bind<bool>("", "IsMiniGame", false, "");

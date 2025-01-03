@@ -40,7 +40,7 @@ namespace InteractiveEnable.UI
 
         private static void OnUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.F5))
+            if (Input.GetKeyDown(Plugin.Instance.ShowMenuKey.Value))
             {
                 Enabled = !Enabled;
             }
