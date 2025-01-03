@@ -9,6 +9,7 @@ BepInEx\config\InteractiveEnable.cfg
 
 
 ## Features
+- F3 Show Menu
 - Activate **Interactive Objects**.
 - Replay TV Games and customize Fight Enemy Difficulty.
 - Open Door
