@@ -13,7 +13,7 @@ namespace InteractiveEnable
         {
             try
             {
-                if (Plugin.isInteractive.Value)
+                if (Plugin.Instance.isInteractive.Value)
                 {
                     if(__instance.name != "Interactive Dance")
                         __instance.active = true;
@@ -31,7 +31,7 @@ namespace InteractiveEnable
         {
             try
             {
-                if (Plugin.isInteractive.Value)
+                if (Plugin.Instance.isInteractive.Value)
                 {
                     __instance.active = true;
                     __instance.dontDestroyAfter = true;
@@ -47,7 +47,7 @@ namespace InteractiveEnable
         [HarmonyPrefix]
         private static void HookMinigamesTelevisionController(MinigamesTelevisionController __instance)
         {
-            if (Plugin.isInteractive.Value)
+            if (Plugin.Instance.isInteractive.Value)
             {
                 __instance.destroyAfter = false;
                 foreach (var x in __instance.games)
@@ -61,7 +61,7 @@ namespace InteractiveEnable
         [HarmonyPrefix]
         private static void MT_GameCnowballsStart(MT_GameCnowballs __instance)
         {
-            if (Plugin.isMiniGame.Value)
+            if (Plugin.Instance.isMiniGame.Value)
             {
                 if (GameObject.Find("World/Quests/Quest 1/Game Aihastion/Dialogues/Pinguin/Dialogue Start/DMita 4") == null)
                 {
@@ -77,7 +77,7 @@ namespace InteractiveEnable
         {
             try
             {
-                if (Plugin.isMiniGame.Value)
+                if (Plugin.Instance.isMiniGame.Value)
                 {
                     if (__instance.resultShow && __instance.resultTimeShow > 7.5f)
                     {
@@ -116,7 +116,7 @@ namespace InteractiveEnable
         [HarmonyPrefix]
         private static void Location4FightUpdate(Location4Fight __instance)
         {
-            if (Plugin.isMiniGame.Value)
+            if (Plugin.Instance.isMiniGame.Value)
             {
                 var game = __instance.gameController.main.games[0];
                 var win = game.countWin;
@@ -143,7 +143,7 @@ namespace InteractiveEnable
         [HarmonyPrefix]
         private static void Location7_GameDanceRestartDataSpheres(Location7_GameDance __instance)
         {
-            if (Plugin.isMiniGame.Value)
+            if (Plugin.Instance.isMiniGame.Value)
             {
                 if (__instance.indexFinishMita >= 3)
                 {
@@ -168,7 +168,7 @@ namespace InteractiveEnable
         {
             //__instance.eventFinishPlayer.Invoke();
             //__instance.transform.parent.gameObject.SetActive(false);
-            if (Plugin.isMiniGame.Value)
+            if (Plugin.Instance.isMiniGame.Value)
             {
                 __instance.screenNextStart = false;
             }
@@ -181,8 +181,38 @@ namespace InteractiveEnable
         [HarmonyPrefix]
         private static bool PatchObjectDoor(ObjectDoor __instance)
         {
-            if(Plugin.isOpenDoor.Value)
+            if(Plugin.Instance.isOpenDoor.Value)
                 __instance.Lock(false);
+
+            return true;
+        }
+
+        [HarmonyPatch(typeof(Shooter_Player), "FixedUpdate")]
+        [HarmonyPostfix]
+        private static void HookShooter_Player(Shooter_Player __instance)
+        {
+            if(Plugin.Instance.isInvincible.Value)
+                __instance.health = 100f;
+        }
+
+        [HarmonyPatch(typeof(Shooter_Player), "Damage")]
+        [HarmonyPrefix]
+        private static bool PatchShooter_PlayerDamage(Shooter_Player __instance, Vector3 _positionDamage)
+        {
+            if (Plugin.Instance.isInvincible.Value)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        [HarmonyPatch(typeof(Shooter_Enemy), "Damage")]
+        [HarmonyPrefix]
+        private static bool PatchEnemyDamage(Shooter_Enemy __instance, float _damage)
+        {
+            if (Plugin.Instance.isOHK.Value)
+                __instance.Death();
 
             return true;
         }

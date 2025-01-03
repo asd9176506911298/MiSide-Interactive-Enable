@@ -1,8 +1,10 @@
 ﻿using InteractiveEnable;
+using Mono.Cecil;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UniverseLib.UI;
+
 
 public class MainPanel : UniverseLib.UI.Panels.PanelBase
 {
@@ -10,7 +12,7 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
 
     public override string Name => "Interactive Enable Mod";
     public override int MinWidth => 600;
-    public override int MinHeight => 300;
+    public override int MinHeight => 500;
     public override Vector2 DefaultAnchorMin => new(0.25f, 0.25f);
     public override Vector2 DefaultAnchorMax => new(0.5f, 0.5f);
     public override bool CanDragAndResize => true;
@@ -36,10 +38,101 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
 
         CreateGlitchGameButton();
 
+        CreateFPSGameButton();
+        CreateInvincibleToggle();
+        CreateOHKToggle();
 
-        
-        
         Owner.Enabled = false;
+    }
+
+    private void CreateInvincibleToggle()
+    {
+        _ = UIFactory.CreateToggle(
+            ContentRoot,
+            "InvincibleToggle",
+            out Toggle toggle,
+            out Text text
+        );
+        text.text = "FPS Player Invincible";
+        toggle.isOn = Plugin.Instance.isInvincible.Value;
+        System.Action<bool> value = (value) =>
+        {
+            Plugin.Instance.isInvincible.Value = value;
+        };
+        toggle.onValueChanged.AddListener(
+            value
+        );
+    }
+
+    private void CreateOHKToggle()
+    {
+         _ = UIFactory.CreateToggle(
+            ContentRoot,
+            "EnemyOHKToggle",
+            out Toggle toggle,
+            out Text text
+        );
+        text.text = "Enemy One Hit Kill";
+        toggle.isOn = Plugin.Instance.isOHK.Value;
+        System.Action<bool> value = (value) =>
+        {
+            Plugin.Instance.isOHK.Value = value;
+        };
+        toggle.onValueChanged.AddListener(
+            value
+        );
+    }
+
+    private void CreateFPSGameButton()
+    {
+        var FPSGame = UIFactory.CreateButton(ContentRoot, "FPSGameButton", "Teleport FPS Game", null);
+        UIFactory.SetLayoutElement(FPSGame.Component.gameObject, minHeight: 25, minWidth: 300);
+        Text nameLabel = FPSGame.Component.GetComponentInChildren<Text>();
+        nameLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        nameLabel.alignment = TextAnchor.MiddleLeft;
+        FPSGame.OnClick += tpFPSGame;
+    }
+
+    private void tpFPSGame()
+    {
+        if (SceneManager.GetActiveScene().name != "MinigameShooter")
+        {
+            if (SceneManager.GetActiveScene().name != "SceneMenu")
+                SceneManager.LoadScene("MinigameShooter", LoadSceneMode.Single);
+
+            if (GameObject.Find("MenuGame") != null)
+                GameObject.Find("MenuGame").GetComponent<Menu>().ButtonLoadScene("MinigameShooter");
+
+            return;
+        }
+
+        foreach (var obj in Resources.FindObjectsOfTypeAll(Il2CppSystem.Type.GetType("Shooter_Main")))
+        {
+            Plugin.Log.LogInfo($"Object: {obj}, Type: {obj.GetType()}");
+
+            var shooterMain = obj.TryCast<Shooter_Main>();
+            if (shooterMain != null)
+            {
+                // Access the associated GameObject and activate it
+                shooterMain.gameObject.SetActive(true);
+                Plugin.Log.LogInfo($"Activated GameObject: {shooterMain.gameObject.name}");
+                continue;
+            }
+
+            var gameObject = obj.TryCast<UnityEngine.GameObject>();
+            if (gameObject != null)
+            {
+                gameObject.SetActive(true);
+                Plugin.Log.LogInfo($"Activated GameObject: {gameObject.name}");
+                continue;
+            }
+
+            // Log unexpected object types
+            Plugin.Log.LogInfo($"Unexpected object type: {obj.GetType()}");
+        }
+
+
+
     }
 
     private void CreateExitDanceButton()
@@ -162,7 +255,7 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         hardLabel.alignment = TextAnchor.MiddleCenter;
         hardButton.OnClick += FightHard;
 
-        difficultText = UIFactory.CreateLabel(difficultRow, "Difficult", "Difficult:");
+        difficultText = UIFactory.CreateLabel(difficultRow, "Difficult", "Fight Difficult:");
         UIFactory.SetLayoutElement(difficultText.gameObject, minHeight: 25, minWidth: 100);
     }
 
@@ -171,7 +264,7 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         foreach (var x in GameObject.FindObjectsOfType<Location4Fight>())
         {
             x.enemyComplexity += 1;
-            difficultText.text = "Difficult: " + x.enemyComplexity.ToString();
+            difficultText.text = "Fight Difficult: " + x.enemyComplexity.ToString();
             Plugin.Log.LogInfo($"enemyComplexity: {x.enemyComplexity}");
         }
     }
@@ -182,7 +275,7 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         {
             if (x.enemyComplexity > 0)
                 x.enemyComplexity -= 1;
-            difficultText.text = "Difficult: " + x.enemyComplexity.ToString();
+            difficultText.text = "Fight Difficult: " + x.enemyComplexity.ToString();
             Plugin.Log.LogInfo($"enemyComplexity: {x.enemyComplexity}");
         }
     }
@@ -330,10 +423,10 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
             out Text text
         );
         text.text = "OpenDoor";
-        toggle.isOn = Plugin.isOpenDoor.Value;
+        toggle.isOn = Plugin.Instance.isOpenDoor.Value;
         System.Action<bool> value = (value) =>
         {
-            Plugin.isOpenDoor.Value = value;
+            Plugin.Instance.isOpenDoor.Value = value;
         };
         toggle.onValueChanged.AddListener(
             value
@@ -349,10 +442,10 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
             out Text text
         );
         text.text = "InteractiveEnable";
-        toggle.isOn = Plugin.isInteractive.Value;
+        toggle.isOn = Plugin.Instance.isInteractive.Value;
         System.Action<bool> value = (value) =>
         {
-            Plugin.isInteractive.Value = value;
+            Plugin.Instance.isInteractive.Value = value;
         };
         toggle.onValueChanged.AddListener(
             value
@@ -368,10 +461,10 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
             out Text text
         );
         text.text = "TV/Dance Game Infinite";
-        toggle.isOn = Plugin.isMiniGame.Value;
+        toggle.isOn = Plugin.Instance.isMiniGame.Value;
         System.Action<bool> value = (value) =>
         {
-            Plugin.isMiniGame.Value = value;
+            Plugin.Instance.isMiniGame.Value = value;
         };
         toggle.onValueChanged.AddListener(
             value

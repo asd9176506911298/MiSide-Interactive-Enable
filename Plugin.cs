@@ -25,9 +25,11 @@ public class Plugin : BasePlugin
     public static ConfigEntry<KeyCode> weakKey;
     public static ConfigEntry<KeyCode> showTVHintKey;
 
-    public static ConfigEntry<bool> isInteractive;
-    public static ConfigEntry<bool> isMiniGame;
-    public static ConfigEntry<bool> isOpenDoor;
+    public ConfigEntry<bool> isInteractive;
+    public ConfigEntry<bool> isMiniGame;
+    public ConfigEntry<bool> isOpenDoor;
+    public ConfigEntry<bool> isInvincible;
+    public ConfigEntry<bool> isOHK;
 
     //public bool isInteractive = false;
     //public bool isMiniGame = false;
@@ -50,6 +52,8 @@ public class Plugin : BasePlugin
         isInteractive = Config.Bind<bool>("", "IsInteractive", false, "");
         isMiniGame = Config.Bind<bool>("", "IsMiniGame", false, "");
         isOpenDoor = Config.Bind<bool>("", "IsOpenDoor", false, "");
+        isInvincible = Config.Bind<bool>("", "IsInvincible", false, "");
+        isOHK = Config.Bind<bool>("", "IsOHK", false, "");
 
         harmony.PatchAll(typeof(Patch));
 
