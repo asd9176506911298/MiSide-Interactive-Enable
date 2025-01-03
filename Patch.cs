@@ -181,9 +181,13 @@ namespace InteractiveEnable
         [HarmonyPrefix]
         private static bool PatchObjectDoor(ObjectDoor __instance)
         {
-            if(Plugin.Instance.isOpenDoor.Value)
-                __instance.Lock(false);
-
+            try { 
+                if(Plugin.Instance.isOpenDoor.Value)
+                    __instance.Lock(false);
+            }catch (Exception ex)
+            {
+                Plugin.Log.LogError($"Unexpected exception in ObjectDoor: {ex.Message}");
+            }
             return true;
         }
 
