@@ -15,6 +15,9 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
     public override Vector2 DefaultAnchorMax => new(0.5f, 0.5f);
     public override bool CanDragAndResize => true;
 
+    protected Text difficultText { get; private set; } = null!;
+    protected Text musicText { get; private set; } = null!;
+
     protected override void ConstructPanelContent()
     {
         Text myText = UIFactory.CreateLabel(ContentRoot, "Features", "Features");
@@ -27,7 +30,156 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         CreateDanceCarGameButton();
         CreateGlitchGameButton();
 
+
+        CreateDifficultButton();
+        CreateChangeMusicButton();
+        CreateExitDanceButton();
         Owner.Enabled = false;
+    }
+
+    private void CreateExitDanceButton()
+    {
+        var exitDance = UIFactory.CreateButton(ContentRoot, "DanceGameExitButton", "Exit Dance Game", null);
+        UIFactory.SetLayoutElement(exitDance.Component.gameObject, minHeight: 25, minWidth: 200);
+        Text nameLabel = exitDance.Component.GetComponentInChildren<Text>();
+        nameLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        nameLabel.alignment = TextAnchor.MiddleLeft;
+        exitDance.OnClick += ExitDance;
+    }
+
+    private void ExitDance()
+    {
+        foreach (var x in GameObject.FindObjectsOfType<Location7_GameDance>())
+        {
+            x.eventFinishPlayer.Invoke();
+            if (x.indexFinishMita >= 3)
+            {
+                GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Игры/Dance/Interactive DanceStart/Canvas").GetComponent<ObjectInteractive_CaseInfo>().dontDestroyAfter = true;
+                GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Игры/Dance/Interactive DanceStart").GetComponent<ObjectInteractive>().active = true;
+            }
+            Plugin.Log.LogInfo($"DanceGame eventFinishPlayer");
+        }
+    }
+
+    private void CreateChangeMusicButton()
+    {
+        var ChangeMusicRow = UIFactory.CreateHorizontalGroup(
+          ContentRoot,
+          "ChangeMusicRow",
+          false,
+          true,
+          true,
+          true,
+          2,
+          new Vector4(2, 2, 2, 2)
+      );
+        UIFactory.SetLayoutElement(
+           ChangeMusicRow,
+           minHeight: 25,
+           minWidth: 200,
+           flexibleHeight: 0,
+           flexibleWidth: 9999
+       );
+
+        var prevButton = UIFactory.CreateButton(ChangeMusicRow, "perv", "perv", null);
+        UIFactory.SetLayoutElement(prevButton.Component.gameObject, minHeight: 25, minWidth: 50);
+        Text easyLabel = prevButton.Component.GetComponentInChildren<Text>();
+        easyLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        easyLabel.alignment = TextAnchor.MiddleCenter;
+        prevButton.OnClick += prevMusic;
+
+        var nextButton = UIFactory.CreateButton(ChangeMusicRow, "next", "next", null);
+        UIFactory.SetLayoutElement(nextButton.Component.gameObject, minHeight: 25, minWidth: 50);
+        Text hardLabel = nextButton.Component.GetComponentInChildren<Text>();
+        hardLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        hardLabel.alignment = TextAnchor.MiddleCenter;
+        nextButton.OnClick += nextMusic;
+
+        musicText = UIFactory.CreateLabel(ChangeMusicRow, "Music", "Music:");
+        UIFactory.SetLayoutElement(difficultText.gameObject, minHeight: 25, minWidth: 200, flexibleWidth:100); 
+    }
+
+    private void prevMusic()
+    {
+        foreach (var x in GameObject.FindObjectsOfType<Location7_GameDance>())
+        {
+            if (x.musicIndexPlay > 0 && x.musicIndexPlay <= 2)
+                x.musicIndexPlay -= 1;
+            musicText.text = "Music: " + GlobalLanguage.GetString("Location 7", x.musicIndexPlay + 1);
+            x.ChangeMusic();
+            Plugin.Log.LogInfo($"musicName: {GlobalLanguage.GetString("Location 7", x.musicIndexPlay + 1)}");
+        }
+    }
+
+    private void nextMusic()
+    {
+        foreach (var x in GameObject.FindObjectsOfType<Location7_GameDance>())
+        {
+            if (x.musicIndexPlay >= 0 && x.musicIndexPlay < 2)
+                x.musicIndexPlay += 1;
+            musicText.text = "Music: " + GlobalLanguage.GetString("Location 7", x.musicIndexPlay + 1);
+            x.ChangeMusic();
+            Plugin.Log.LogInfo($"musicName: {GlobalLanguage.GetString("Location 7", x.musicIndexPlay + 1)}");
+        }
+    }
+
+    private void CreateDifficultButton()
+    {
+        var difficultRow = UIFactory.CreateHorizontalGroup(
+            ContentRoot,
+            "DifficultRow",
+            false,
+            true,
+            true,
+            true,
+            2,
+            new Vector4(2, 2, 2, 2)
+        );
+        UIFactory.SetLayoutElement(
+           difficultRow,
+           minHeight: 25,
+           minWidth: 200,
+           flexibleHeight: 0,
+           flexibleWidth: 999
+       );
+
+        var easyButton = UIFactory.CreateButton(difficultRow, "easy", "easy", null);
+        UIFactory.SetLayoutElement(easyButton.Component.gameObject, minHeight: 25, minWidth: 50);
+        Text easyLabel = easyButton.Component.GetComponentInChildren<Text>();
+        easyLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        easyLabel.alignment = TextAnchor.MiddleCenter;
+        easyButton.OnClick += FightEasy;
+
+        var hardButton = UIFactory.CreateButton(difficultRow, "hard", "hard", null);
+        UIFactory.SetLayoutElement(hardButton.Component.gameObject, minHeight: 25, minWidth: 50);
+        Text hardLabel = hardButton.Component.GetComponentInChildren<Text>();
+        hardLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        hardLabel.alignment = TextAnchor.MiddleCenter;
+        hardButton.OnClick += FightHard;
+
+        difficultText = UIFactory.CreateLabel(difficultRow, "Difficult", "Difficult:");
+        UIFactory.SetLayoutElement(difficultText.gameObject, minHeight: 25, minWidth: 100);
+    }
+
+    private void FightEasy()
+    {
+        foreach (var x in GameObject.FindObjectsOfType<Location4Fight>())
+        {
+            x.enemyComplexity += 1;
+            difficultText.text = "Difficult: " + x.enemyComplexity.ToString();
+            Plugin.Log.LogInfo($"enemyComplexity: {x.enemyComplexity}");
+        }
+    }
+
+    private void FightHard()
+    {
+        foreach (var x in GameObject.FindObjectsOfType<Location4Fight>())
+        {
+            if (x.enemyComplexity > 0)
+                x.enemyComplexity -= 1;
+            difficultText.text = "Difficult: " + x.enemyComplexity.ToString();
+            Plugin.Log.LogInfo($"enemyComplexity: {x.enemyComplexity}");
+        }
     }
 
     private void CreateTVGameButton()
