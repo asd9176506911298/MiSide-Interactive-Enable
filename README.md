@@ -5,7 +5,7 @@
 
 ## Features
 - Activate **Interactive Objects**.
-- Replay TV Games and customize Enemy Difficulty.
+- Replay TV Games and customize Fight Enemy Difficulty.
 - Open Door
 - Dance Game Replay Change Music
 - Teleport to Game
