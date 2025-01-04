@@ -220,5 +220,14 @@ namespace InteractiveEnable
 
             return true;
         }
+
+        [HarmonyPatch(typeof(PlayerMove), "FixedUpdate")]
+        [HarmonyPrefix]
+        private static bool HookFixedUpdate(PlayerMove __instance)
+        {
+            __instance.rb.AddForce(Vector3.up * 0.5f, ForceMode.Impulse); // Example impulse force
+
+            return true;
+        }
     }
 }

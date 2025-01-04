@@ -43,6 +43,31 @@ namespace InteractiveEnable.UI
             if (Input.GetKeyDown(Plugin.Instance.ShowMenuKey.Value))
             {
                 Enabled = !Enabled;
+
+                if(GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/House/Toilet") != null)
+                    GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/House/Toilet").SetActive(true);
+
+                if(GameObject.Find("World/House/Bedroom/Bedroom") != null)
+                    GameObject.Find("World/House/Bedroom/Bedroom").SetActive(true);
+
+                if (GameObject.Find("World/House/Bedroom/DoorCage Bedroom-Hall") != null)
+                    GameObject.Find("World/House/Bedroom/DoorCage Bedroom-Hall").SetActive(true);
+
+                if (GameObject.Find("World/Acts/Mita Кепка/MitaPerson Know/RightItem/Vibrator") != null)
+                {
+                    GameObject.Find("World/Acts/Mita Кепка/MitaPerson Know/RightItem/Vibrator").SetActive(true);
+                    GameObject.Find("World/Acts/Mita Кепка/MitaPerson Know/RightItem/Vibrator").transform.localPosition = new Vector3(0.04f, 0.07f, 0.06f);
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                GlobalTag.player.GetComponent<Rigidbody>().AddForce(0f, 10f, 0f, ForceMode.VelocityChange);
+            }
+
+            if(GameObject.Find("World/Acts/Mita Кепка") != null)
+            {
+                GameObject.Find("World/Acts/Mita Кепка").GetComponent<MitaPerson>().AiWalkToTarget(GlobalTag.player.transform);
             }
         }
     }
