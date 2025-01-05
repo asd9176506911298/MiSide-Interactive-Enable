@@ -43,8 +43,9 @@ public class Plugin : BasePlugin
         Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
         Harmony.DEBUG = true;
 
+#if DEBUG
         Console.OutputEncoding = System.Text.Encoding.UTF8;
-
+#endif
         //interactiveKey = Config.Bind<KeyCode>("", "InteractiveKey", KeyCode.PageUp, "");
         //miniGameKey = Config.Bind<KeyCode>("", "MiniGameKey", KeyCode.PageDown, "");
         //hardKey = Config.Bind<KeyCode>("", "HardKey", KeyCode.KeypadPlus, "");
