@@ -5,10 +5,10 @@ using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using System;
 using UnityEngine;
-using UniverseLib.Config;
 using UniverseLib;
 using System.IO;
 using InteractiveEnable.UI;
+using System.Reflection;
 
 namespace InteractiveEnable;
 

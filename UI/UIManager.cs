@@ -1,9 +1,15 @@
-﻿using System;
+﻿using BepInEx;
+using EPOOutline;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Il2CppInterop.Runtime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Diagnostics;
+using UnityEngine.Events;
 using UniverseLib.UI;
 
 namespace InteractiveEnable.UI
@@ -12,6 +18,7 @@ namespace InteractiveEnable.UI
 
     public class UIManager
     {
+        public static UniverseLib.AssetBundle ab;
         public static bool Enabled
         {
             get => UiBase is not null and { Enabled: true };
@@ -36,14 +43,220 @@ namespace InteractiveEnable.UI
             Panel = new(UiBase);
 
             KeyInputHandler.Instance.onUpdate += OnUpdate;
+            ab = UniverseLib.AssetBundle.LoadFromFile($"{Paths.PluginPath}/maxwell");
         }
 
         private static void OnUpdate()
         {
+            if (Input.GetKeyDown(KeyCode.F4))
+            {
+                
+                if (ab != null)
+                {
+                    //var x = ab.LoadAsset<GameObject>("maxwell");
+                    //var g = GameObject.Instantiate(x);
+                    //var x = ab.LoadAsset<GameObject>("fish");
+                    //var g = GameObject.Instantiate(x);
+
+                    GameObject toClone = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Интерактивы/Interactive Book/");
+                    GameObject cloned = UnityEngine.Object.Instantiate(toClone);
+                    GameObject interactives = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Интерактивы");
+                    cloned.transform.parent = interactives.transform;
+                    cloned.transform.position = new Vector3(-24.7664f, 0.712f, 6.1761f);
+                    Outlinable outlineable = cloned.GetComponent<Outlinable>();
+                    outlineable.OutlineTargets.Clear();
+                    Renderer bed = GameObject.Find("World/House/Bedroom/Bedroom/Bed").GetComponent<Renderer>();
+                    outlineable.OutlineTargets.Add(new OutlineTarget(bed, ""));
+                    ObjectInteractive interactable = cloned.GetComponent<ObjectInteractive>();
+                    interactable.active = true;
+                    interactable.eventClick = new UnityEvent();
+                    interactable.eventClick.AddListener(DelegateSupport.ConvertDelegate<UnityAction>((Delegate)(Action)delegate
+                    {
+                        var x = ab.LoadAsset<GameObject>("fish");
+                        var g = GameObject.Instantiate(x);
+                        g.transform.position = new Vector3(-24.76f, 1.21f, 6.67f);
+                        g.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+                        GameObject.Destroy(g, 5f);
+                    }));
+                    ObjectInteractive_CaseInfo caseInfoTarget = cloned.GetComponentInChildren<ObjectInteractive_CaseInfo>();
+                    ObjectInteractive_CaseInfo caseInfoSource = toClone.GetComponentInChildren<ObjectInteractive_CaseInfo>();
+                    caseInfoTarget.cameraT = caseInfoSource.cameraT;
+                    caseInfoTarget.frameText = caseInfoSource.frameText;
+                    caseInfoTarget.text = caseInfoSource.text;
+                    caseInfoTarget.colorGradient1 = caseInfoSource.colorGradient1;
+                    caseInfoTarget.colorGradient2 = caseInfoSource.colorGradient2;
+                    caseInfoTarget.dontDestroyAfter = true;
+                    Location34_Communication communication = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой").GetComponent<Location34_Communication>();
+                    //CollectionExtensions.AddItem<GameObject>((IEnumerable<GameObject>)communication.addonInteractive, cloned);
+                    Il2CppReferenceArray<GameObject> newArr = new Il2CppReferenceArray<GameObject>((long)(((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive).Count + 1));
+                    for (int i = 0; i < ((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive).Count; i++)
+                    {
+                        ((Il2CppArrayBase<GameObject>)(object)newArr)[i] = ((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive)[i];
+                    }
+        ((Il2CppArrayBase<GameObject>)(object)newArr)[((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive).Count] = cloned;
+                    communication.addonInteractive = newArr;
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.F5))
+            {
+
+                if (ab != null)
+                {
+                    //var x = ab.LoadAsset<GameObject>("maxwell");
+                    //var g = GameObject.Instantiate(x);
+                    //var x = ab.LoadAsset<GameObject>("fish");
+                    //var g = GameObject.Instantiate(x);
+
+                    GameObject toClone = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Интерактивы/Interactive Book/");
+                    GameObject cloned = UnityEngine.Object.Instantiate(toClone);
+                    GameObject interactives = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Интерактивы");
+                    cloned.transform.parent = interactives.transform;
+                    cloned.transform.position = new Vector3(-24.7664f, 0.712f, 6.1761f);
+                    Outlinable outlineable = cloned.GetComponent<Outlinable>();
+                    outlineable.OutlineTargets.Clear();
+                    Renderer bed = GameObject.Find("World/House/Bedroom/Bedroom/Bed").GetComponent<Renderer>();
+                    outlineable.OutlineTargets.Add(new OutlineTarget(bed, ""));
+                    ObjectInteractive interactable = cloned.GetComponent<ObjectInteractive>();
+                    interactable.active = true;
+                    interactable.eventClick = new UnityEvent();
+                    interactable.eventClick.AddListener(DelegateSupport.ConvertDelegate<UnityAction>((Delegate)(Action)delegate
+                    {
+                        var x = ab.LoadAsset<GameObject>("maxwell");
+                        var fake = new GameObject("fakeMaxwell");
+                        fake.transform.position = new Vector3(-24.76f, 0.81f, 6.67f);
+                        fake.transform.rotation = Quaternion.Euler(0f,90f,0f);
+                        var g = GameObject.Instantiate(x,fake.transform);
+                        g.GetComponent<AudioSource>().volume = 0.5f;
+                        GameObject.Destroy(fake, 7f);
+                    }));
+                    ObjectInteractive_CaseInfo caseInfoTarget = cloned.GetComponentInChildren<ObjectInteractive_CaseInfo>();
+                    ObjectInteractive_CaseInfo caseInfoSource = toClone.GetComponentInChildren<ObjectInteractive_CaseInfo>();
+                    caseInfoTarget.cameraT = caseInfoSource.cameraT;
+                    caseInfoTarget.frameText = caseInfoSource.frameText;
+                    caseInfoTarget.text = caseInfoSource.text;
+                    caseInfoTarget.colorGradient1 = caseInfoSource.colorGradient1;
+                    caseInfoTarget.colorGradient2 = caseInfoSource.colorGradient2;
+                    caseInfoTarget.dontDestroyAfter = true;
+                    Location34_Communication communication = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой").GetComponent<Location34_Communication>();
+                    //CollectionExtensions.AddItem<GameObject>((IEnumerable<GameObject>)communication.addonInteractive, cloned);
+                    Il2CppReferenceArray<GameObject> newArr = new Il2CppReferenceArray<GameObject>((long)(((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive).Count + 1));
+                    for (int i = 0; i < ((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive).Count; i++)
+                    {
+                        ((Il2CppArrayBase<GameObject>)(object)newArr)[i] = ((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive)[i];
+                    }
+        ((Il2CppArrayBase<GameObject>)(object)newArr)[((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive).Count] = cloned;
+                    communication.addonInteractive = newArr;
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.F6))
+            {
+
+                if (ab != null)
+                {
+                    //var x = ab.LoadAsset<GameObject>("maxwell");
+                    //var g = GameObject.Instantiate(x);
+                    //var x = ab.LoadAsset<GameObject>("fish");
+                    //var g = GameObject.Instantiate(x);
+
+                    GameObject toClone = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Интерактивы/Interactive Book/");
+                    GameObject cloned = UnityEngine.Object.Instantiate(toClone);
+                    GameObject interactives = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Интерактивы");
+                    cloned.transform.parent = interactives.transform;
+                    cloned.transform.position = new Vector3(-24.7664f, 0.712f, 6.1761f);
+                    Outlinable outlineable = cloned.GetComponent<Outlinable>();
+                    outlineable.OutlineTargets.Clear();
+                    Renderer bed = GameObject.Find("World/House/Bedroom/Bedroom/Bed").GetComponent<Renderer>();
+                    outlineable.OutlineTargets.Add(new OutlineTarget(bed, ""));
+                    ObjectInteractive interactable = cloned.GetComponent<ObjectInteractive>();
+                    interactable.active = true;
+                    interactable.eventClick = new UnityEvent();
+                    interactable.eventClick.AddListener(DelegateSupport.ConvertDelegate<UnityAction>((Delegate)(Action)delegate
+                    {
+                        var x = ab.LoadAsset<GameObject>("oii");
+                        var g = GameObject.Instantiate(x);
+                        g.transform.position = new Vector3(-24.76f, 1.21f, 6.67f);
+                        g.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+                        GameObject.Destroy(g, 5f);
+                    }));
+                    ObjectInteractive_CaseInfo caseInfoTarget = cloned.GetComponentInChildren<ObjectInteractive_CaseInfo>();
+                    ObjectInteractive_CaseInfo caseInfoSource = toClone.GetComponentInChildren<ObjectInteractive_CaseInfo>();
+                    caseInfoTarget.cameraT = caseInfoSource.cameraT;
+                    caseInfoTarget.frameText = caseInfoSource.frameText;
+                    caseInfoTarget.text = caseInfoSource.text;
+                    caseInfoTarget.colorGradient1 = caseInfoSource.colorGradient1;
+                    caseInfoTarget.colorGradient2 = caseInfoSource.colorGradient2;
+                    caseInfoTarget.dontDestroyAfter = true;
+                    Location34_Communication communication = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой").GetComponent<Location34_Communication>();
+                    //CollectionExtensions.AddItem<GameObject>((IEnumerable<GameObject>)communication.addonInteractive, cloned);
+                    Il2CppReferenceArray<GameObject> newArr = new Il2CppReferenceArray<GameObject>((long)(((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive).Count + 1));
+                    for (int i = 0; i < ((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive).Count; i++)
+                    {
+                        ((Il2CppArrayBase<GameObject>)(object)newArr)[i] = ((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive)[i];
+                    }
+        ((Il2CppArrayBase<GameObject>)(object)newArr)[((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive).Count] = cloned;
+                    communication.addonInteractive = newArr;
+                }
+            }
             if (Input.GetKeyDown(Plugin.Instance.ShowMenuKey.Value))
             {
-                //Enabled = !Enabled;
+                Enabled = !Enabled;
+                
 
+        //        var ab = UniverseLib.AssetBundle.LoadFromFile($"{Paths.PluginPath}/maxwell");
+        //        if (ab != null)
+        //        {
+        //            //var x = ab.LoadAsset<GameObject>("maxwell");
+        //            //var g = GameObject.Instantiate(x);
+        //            //var x = ab.LoadAsset<GameObject>("fish");
+        //            //var g = GameObject.Instantiate(x);
+
+        //            GameObject toClone = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Интерактивы/Interactive Book/");
+        //            GameObject cloned = UnityEngine.Object.Instantiate(toClone);
+        //            GameObject interactives = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой/Интерактивы");
+        //            cloned.transform.parent = interactives.transform;
+        //            cloned.transform.position = new Vector3(-24.7664f, 0.712f, 6.1761f);
+        //            Outlinable outlineable = cloned.GetComponent<Outlinable>();
+        //            outlineable.OutlineTargets.Clear();
+        //            Renderer bed = GameObject.Find("World/House/Bedroom/Bedroom/Bed").GetComponent<Renderer>();
+        //            outlineable.OutlineTargets.Add(new OutlineTarget(bed, ""));
+        //            ObjectInteractive interactable = cloned.GetComponent<ObjectInteractive>();
+        //            interactable.active = true;
+        //            interactable.eventClick = new UnityEvent();
+        //            interactable.eventClick.AddListener(DelegateSupport.ConvertDelegate<UnityAction>((Delegate)(Action)delegate
+        //            {
+        //                var x = ab.LoadAsset<GameObject>("oii");
+        //                var g = GameObject.Instantiate(x);
+        //                GameObject.Destroy(g, 5f);
+        //            }));
+        //            ObjectInteractive_CaseInfo caseInfoTarget = cloned.GetComponentInChildren<ObjectInteractive_CaseInfo>();
+        //            ObjectInteractive_CaseInfo caseInfoSource = toClone.GetComponentInChildren<ObjectInteractive_CaseInfo>();
+        //            caseInfoTarget.cameraT = caseInfoSource.cameraT;
+        //            caseInfoTarget.frameText = caseInfoSource.frameText;
+        //            caseInfoTarget.text = caseInfoSource.text;
+        //            caseInfoTarget.colorGradient1 = caseInfoSource.colorGradient1;
+        //            caseInfoTarget.colorGradient2 = caseInfoSource.colorGradient2;
+        //            caseInfoTarget.dontDestroyAfter = true;
+        //            Location34_Communication communication = GameObject.Find("World/Quests/Quest4 - Проводим время с Кепкой").GetComponent<Location34_Communication>();
+        //            //CollectionExtensions.AddItem<GameObject>((IEnumerable<GameObject>)communication.addonInteractive, cloned);
+        //            Il2CppReferenceArray<GameObject> newArr = new Il2CppReferenceArray<GameObject>((long)(((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive).Count + 1));
+        //            for (int i = 0; i < ((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive).Count; i++)
+        //            {
+        //                ((Il2CppArrayBase<GameObject>)(object)newArr)[i] = ((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive)[i];
+        //            }
+        //((Il2CppArrayBase<GameObject>)(object)newArr)[((Il2CppArrayBase<GameObject>)(object)communication.addonInteractive).Count] = cloned;
+        //            communication.addonInteractive = newArr;
+
+        //            //var x = ab.LoadAsset<GameObject>("oii");
+        //            //var g = GameObject.Instantiate(x);
+        //            //GameObject toClone = GameObject.Find("World/Quests/Quest 1/Addon/Interactive PhotoMita");
+        //            //GameObject cloned = GameObject.Instantiate<GameObject>(toClone);
+        //            //g.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        //            //g.transform.position = GameObject.Find("GameController/Player/Person/Arms").transform.position;
+        //            //g.transform.SetParent(GameObject.Find("GameController/Player/Person/Arms").transform);
+        //        }
+                return;
                 foreach (var obj in GameObject.FindObjectsOfType<MeshRenderer>())
                 {
                     if (!(obj.gameObject.TryGetComponent<BoxCollider>(out var collider)))
