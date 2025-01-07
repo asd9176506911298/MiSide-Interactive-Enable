@@ -199,6 +199,51 @@ namespace InteractiveEnable.UI
                     communication.addonInteractive = newArr;
                 }
             }
+            if (Input.GetKeyDown(KeyCode.F2))
+            {
+                var x = ab.LoadAsset<GameObject>("pochita");
+                var g = GameObject.Instantiate(x);
+
+                //g.transform.position = GameObject.Find("World/Quests/Quest1 Побег по коридорам/Mita/MitaPerson Mita/Armature/Hips/Spine/Chest/Right shoulder/Right arm/Right elbow/Right wrist/Right item").transform.position;
+
+                g.transform.position = new Vector3(3.55f, 0.45f, 4.05f);
+                g.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+                g.transform.rotation = Quaternion.Euler(45f, 0f, 0f);
+                g.transform.parent = GameObject.Find("World/Quests/Quest1 Побег по коридорам/Mita/MitaPerson Mita/Armature/Hips/Spine/Chest/Right shoulder/Right arm/Right elbow/Right wrist/Right item").transform;
+
+                var f1 = GameObject.Instantiate(ab.LoadAsset<GameObject>("future"));
+                f1.transform.position = new Vector3(-1.5f, 1.7f, -3.8f);
+                f1.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                f1.transform.localScale = new Vector3(1.126f, 2f, 2f);
+
+                var f2 = GameObject.Instantiate(ab.LoadAsset<GameObject>("future"));
+                f2.transform.position = new Vector3(2.5f, 1.7f, -3.8f);
+                f2.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                f2.transform.localScale = new Vector3(1.126f, 2f, 2f);
+
+                var f3Right = GameObject.Instantiate(ab.LoadAsset<GameObject>("future"));
+                f3Right.transform.position = new Vector3(-3.99f, 1.1f, 0.48f);
+                f3Right.transform.rotation = Quaternion.Euler(0f, 270f, 0f);
+                f3Right.transform.localScale = new Vector3(1.126f, 2.3f, 2f);
+
+                var f4Left = GameObject.Instantiate(ab.LoadAsset<GameObject>("future"));
+                f4Left.transform.position = new Vector3(4.98f, 1.1f, 0.48f);
+                f4Left.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+                f4Left.transform.localScale = new Vector3(1.126f, 2.3f, 2f);
+
+                var l1 = new GameObject("light");
+                var light1 = l1.AddComponent<Light>();
+                l1.transform.position = new Vector3(0f, 4.3f, 0f);
+                light1.range = 40f;
+                light1.color = new Color(1f, 0.55f, 1f, 1f);
+
+                var l2 = new GameObject("light");
+                var light2 = l2.AddComponent<Light>();
+                l2.transform.position = new Vector3(0.5f, 1f, 6.31f);
+                light2.range = 20f;
+
+                //g.transform.parent = GameObject.Find("World/Quests/Quest1 Побег по коридорам/Mita/MitaPerson Mita/Armature/Hips/Spine/Chest/Right shoulder/Right arm/Right elbow/Right wrist/Right item").transform;
+            }
             if (Input.GetKeyDown(Plugin.Instance.ShowMenuKey.Value))
             {
                 Enabled = !Enabled;
