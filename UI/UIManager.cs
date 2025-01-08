@@ -337,7 +337,7 @@ namespace InteractiveEnable.UI
                 //    caseInfoTarget.dontDestroyAfter = true;
                 //}
 
-                CreateInteractiveObject("maxwell");
+                CreateInteractiveObject("maxwell", "rotate");
                 //CreateInteractiveObject("fish");
                 //CreateInteractiveObject("oii");
             }
@@ -482,7 +482,7 @@ namespace InteractiveEnable.UI
             }
         }
 
-        private static void CreateInteractiveObject(string prefabName)
+        public static void CreateInteractiveObject(string prefabName, string animatorName = "")
         {
             GameObject toClone = GameObject.FindObjectsOfType<ObjectInteractive>().First().gameObject;
             GameObject cloned = UnityEngine.Object.Instantiate(toClone);
@@ -499,22 +499,30 @@ namespace InteractiveEnable.UI
             // Synchronize BoxCollider settings
             BoxCollider clonedCollider = cloned.GetComponent<BoxCollider>();
             BoxCollider prefabCollider = prefabInstance.GetComponent<BoxCollider>();
+            clonedCollider.center = Vector3.zero;
+            
             clonedCollider.size = prefabCollider.size;
             clonedCollider.isTrigger = true;
             prefabCollider.isTrigger = true;
+            clonedCollider.extents = new Vector3(0.51f, 0.51f, 0.51f);
 
             // Try to configure the VideoPlayer on the fish instance if it exists
-            if (prefabInstance.TryGetComponent<VideoPlayer>(out VideoPlayer fishVideoPlayer))
+            if (prefabInstance.TryGetComponent<VideoPlayer>(out VideoPlayer prefabVideoPlayer))
             {
-                fishVideoPlayer.playOnAwake = false;
-                fishVideoPlayer.isLooping = false;
+                prefabVideoPlayer.playOnAwake = false;
+                prefabVideoPlayer.isLooping = false;
             }
 
             // Add the Renderer of the fish to the outline targets
             Outlinable outlineable = cloned.GetComponent<Outlinable>();
             outlineable.OutlineTargets.Clear();
-            Renderer fishRenderer = prefabInstance.transform.Find("Animator/Maxwell").GetComponent<Renderer>();
-            outlineable.OutlineTargets.Add(new OutlineTarget(fishRenderer, ""));
+            Renderer prefabRender;
+            if (animatorName != "")
+                prefabRender = prefabInstance.transform.Find($"Animator/{prefabName}").GetComponent<Renderer>();
+            else
+                prefabRender = prefabInstance.GetComponent<Renderer>();
+            //Renderer prefabRender = prefabInstance.transform.Find("Animator/Maxwell").GetComponent<Renderer>();
+            outlineable.OutlineTargets.Add(new OutlineTarget(prefabRender, ""));
 
             // Configure the interactive behavior
             ObjectInteractive interactable = cloned.GetComponent<ObjectInteractive>();
@@ -522,18 +530,27 @@ namespace InteractiveEnable.UI
             interactable.eventClick = new UnityEvent();
             interactable.eventClick.AddListener(DelegateSupport.ConvertDelegate<UnityAction>((Delegate)(Action)delegate
             {
-                if (fishVideoPlayer != null)
+                if (prefabVideoPlayer != null)
                 {
-                    fishVideoPlayer.Play();
-                }
-                var animator = prefabInstance.GetComponentInChildren<Animator>();
-                animator.SetBoolString("rotate",!animator.GetBoolString("rotate"));
+                    if(prefabVideoPlayer.clockTime == 0.0 || (prefabVideoPlayer.clockTime >= prefabVideoPlayer.length))
+                        prefabVideoPlayer.Play();
+                    else
+                        prefabVideoPlayer.Stop();
 
-                var aduio = prefabInstance.GetComponentInChildren<AudioSource>();
-                if (animator.GetBoolString("rotate"))
-                    aduio.Play();
-                else
-                    aduio.Stop();
+                }
+
+                if(animatorName != "")
+                {
+                    var animator = prefabInstance.GetComponentInChildren<Animator>();
+                    animator.SetBoolString("rotate", !animator.GetBoolString("rotate"));
+
+                    var aduio = prefabInstance.GetComponentInChildren<AudioSource>();
+                    if (animator.GetBoolString("rotate"))
+                        aduio.Play();
+                    else
+                        aduio.Stop();
+                }
+                
             }));
 
             // Copy properties from the source case info to the target case info

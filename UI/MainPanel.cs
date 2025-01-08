@@ -1,4 +1,5 @@
 ﻿using InteractiveEnable;
+using InteractiveEnable.UI;
 using Mono.Cecil;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -43,7 +44,51 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         CreateInvincibleToggle();
         CreateOHKToggle();
 
+        CreateMaxwellButton();
+
         Owner.Enabled = false;
+    }
+
+    private void CreateMaxwellButton()
+    {
+        var memeRow = UIFactory.CreateHorizontalGroup(
+            ContentRoot,
+            "DifficultRow",
+            false,
+            true,
+            true,
+            true,
+            2,
+            new Vector4(2, 2, 2, 2)
+        );
+        UIFactory.SetLayoutElement(
+           memeRow,
+           minHeight: 25,
+           minWidth: 200,
+           flexibleHeight: 0,
+           flexibleWidth: 999
+       );
+
+        var MaxwellButton = UIFactory.CreateButton(memeRow, "MaxwellButton", "Maxwell", null);
+        UIFactory.SetLayoutElement(MaxwellButton.Component.gameObject, minHeight: 25, minWidth: 60);
+        Text maxwellLabel = MaxwellButton.Component.GetComponentInChildren<Text>();
+        maxwellLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        maxwellLabel.alignment = TextAnchor.MiddleCenter;
+        MaxwellButton.OnClick += () => UIManager.CreateInteractiveObject("maxwell", "rotate");
+
+        var FishButton = UIFactory.CreateButton(memeRow, "FishButton", "Fish", null);
+        UIFactory.SetLayoutElement(FishButton.Component.gameObject, minHeight: 25, minWidth: 60);
+        Text fishLabel = FishButton.Component.GetComponentInChildren<Text>();
+        fishLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        fishLabel.alignment = TextAnchor.MiddleCenter;
+        FishButton.OnClick += () => UIManager.CreateInteractiveObject("fish");
+
+        var oiiaiButton = UIFactory.CreateButton(memeRow, "oiiaiButton", "oiiai", null);
+        UIFactory.SetLayoutElement(oiiaiButton.Component.gameObject, minHeight: 25, minWidth: 60);
+        Text oiiaiLabel = oiiaiButton.Component.GetComponentInChildren<Text>();
+        oiiaiLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        oiiaiLabel.alignment = TextAnchor.MiddleCenter;
+        oiiaiButton.OnClick += () => UIManager.CreateInteractiveObject("oii");
     }
 
     private void CreateTVHintButton()
