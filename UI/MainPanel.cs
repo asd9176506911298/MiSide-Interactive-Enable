@@ -89,6 +89,34 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         oiiaiLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
         oiiaiLabel.alignment = TextAnchor.MiddleCenter;
         oiiaiButton.OnClick += () => UIManager.CreateInteractiveObject("oii");
+
+        var futureButton = UIFactory.CreateButton(memeRow, "FutureButton", "Future", null);
+        UIFactory.SetLayoutElement(futureButton.Component.gameObject, minHeight: 25, minWidth: 60);
+        Text futureLabel = futureButton.Component.GetComponentInChildren<Text>();
+        futureLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        futureLabel.alignment = TextAnchor.MiddleCenter;
+        futureButton.OnClick += () => UIManager.CreateInteractiveObject("future");
+
+        var cowButton = UIFactory.CreateButton(memeRow, "CowButton", "Cow", null);
+        UIFactory.SetLayoutElement(cowButton.Component.gameObject, minHeight: 25, minWidth: 60);
+        Text cowLabel = cowButton.Component.GetComponentInChildren<Text>();
+        cowLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        cowLabel.alignment = TextAnchor.MiddleCenter;
+        cowButton.OnClick += () => UIManager.CreateInteractiveObject("cow");
+
+        var caramelldansenButton = UIFactory.CreateButton(memeRow, "caramelldansenButton", "Caramelldansen", null);
+        UIFactory.SetLayoutElement(caramelldansenButton.Component.gameObject, minHeight: 25, minWidth: 100);
+        Text caramelldansenLabel = caramelldansenButton.Component.GetComponentInChildren<Text>();
+        caramelldansenLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        caramelldansenLabel.alignment = TextAnchor.MiddleCenter;
+        caramelldansenButton.OnClick += () => UIManager.CreateInteractiveObject("caramelldansen");
+
+        var bocchiButton = UIFactory.CreateButton(memeRow, "BocchiButton", "bocchi", null);
+        UIFactory.SetLayoutElement(bocchiButton.Component.gameObject, minHeight: 25, minWidth: 60);
+        Text bocchiLabel = bocchiButton.Component.GetComponentInChildren<Text>();
+        bocchiLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        bocchiLabel.alignment = TextAnchor.MiddleCenter;
+        bocchiButton.OnClick += () => UIManager.CreateInteractiveObject("bocchi");
     }
 
     private void CreateTVHintButton()

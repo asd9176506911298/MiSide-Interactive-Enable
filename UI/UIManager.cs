@@ -495,16 +495,17 @@ namespace InteractiveEnable.UI
             // Configure the cloned GameObject
             cloned.name = $"Interactive {prefabName}";
             cloned.transform.position = prefabInstance.transform.position;
+            //cloned.transform.parent = prefabInstance.transform;
 
             // Synchronize BoxCollider settings
             BoxCollider clonedCollider = cloned.GetComponent<BoxCollider>();
             BoxCollider prefabCollider = prefabInstance.GetComponent<BoxCollider>();
             clonedCollider.center = Vector3.zero;
-            
             clonedCollider.size = prefabCollider.size;
+            clonedCollider.extents = new Vector3(0.51f, 0.51f, 0.51f);
             clonedCollider.isTrigger = true;
             prefabCollider.isTrigger = true;
-            clonedCollider.extents = new Vector3(0.51f, 0.51f, 0.51f);
+            
 
             // Try to configure the VideoPlayer on the fish instance if it exists
             if (prefabInstance.TryGetComponent<VideoPlayer>(out VideoPlayer prefabVideoPlayer))
@@ -524,6 +525,9 @@ namespace InteractiveEnable.UI
             //Renderer prefabRender = prefabInstance.transform.Find("Animator/Maxwell").GetComponent<Renderer>();
             outlineable.OutlineTargets.Add(new OutlineTarget(prefabRender, ""));
 
+            var aduio = prefabInstance.GetComponentInChildren<AudioSource>();
+            //aduio.mute = true;
+
             // Configure the interactive behavior
             ObjectInteractive interactable = cloned.GetComponent<ObjectInteractive>();
             interactable.active = true;
@@ -532,7 +536,8 @@ namespace InteractiveEnable.UI
             {
                 if (prefabVideoPlayer != null)
                 {
-                    if(prefabVideoPlayer.clockTime == 0.0 || (prefabVideoPlayer.clockTime >= prefabVideoPlayer.length))
+                    prefabVideoPlayer.isLooping = true;
+                    if (prefabVideoPlayer.clockTime == 0.0 || (prefabVideoPlayer.clockTime >= prefabVideoPlayer.length))
                         prefabVideoPlayer.Play();
                     else
                         prefabVideoPlayer.Stop();
