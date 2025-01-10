@@ -23,6 +23,7 @@ BepInEx\config\InteractiveEnable.cfg
 - Dance Game Replay Change Music / 重玩跳舞遊戲 換歌
 - Teleport to Game / 傳送至遊戲前
 - FPS Game Invincible One Hit Kill / FPS遊戲 無敵 一級必殺
+- Meme Object / 迷因物件
 
 ![](/img/Menu.png)
 
