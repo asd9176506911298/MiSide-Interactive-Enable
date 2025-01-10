@@ -13,6 +13,7 @@ using UnityEngine.Events;
 using UniverseLib.UI;
 using UnityEngineInternal.Video;
 using UnityEngine.Video;
+using System.Net.Sockets;
 
 namespace InteractiveEnable.UI
 {
@@ -45,7 +46,7 @@ namespace InteractiveEnable.UI
             Panel = new(UiBase);
 
             KeyInputHandler.Instance.onUpdate += OnUpdate;
-            ab = UniverseLib.AssetBundle.LoadFromFile($"{Paths.PluginPath}/maxwell");
+            ab = UniverseLib.AssetBundle.LoadFromFile($"{Paths.PluginPath}/InteractiveEnable/maxwell");
         }
 
         private static void OnUpdate()
@@ -500,9 +501,9 @@ namespace InteractiveEnable.UI
             // Synchronize BoxCollider settings
             BoxCollider clonedCollider = cloned.GetComponent<BoxCollider>();
             BoxCollider prefabCollider = prefabInstance.GetComponent<BoxCollider>();
-            clonedCollider.center = Vector3.zero;
+            clonedCollider.center = prefabCollider.center;
             clonedCollider.size = prefabCollider.size;
-            clonedCollider.extents = new Vector3(0.51f, 0.51f, 0.51f);
+            clonedCollider.extents = prefabCollider.extents;
             clonedCollider.isTrigger = true;
             prefabCollider.isTrigger = true;
             
@@ -534,6 +535,11 @@ namespace InteractiveEnable.UI
             interactable.eventClick = new UnityEvent();
             interactable.eventClick.AddListener(DelegateSupport.ConvertDelegate<UnityAction>((Delegate)(Action)delegate
             {
+                if (Plugin.Instance.isMute.Value)
+                    aduio.mute = true;
+                else
+                    aduio.mute = false;
+
                 if (prefabVideoPlayer != null)
                 {
                     prefabVideoPlayer.isLooping = true;

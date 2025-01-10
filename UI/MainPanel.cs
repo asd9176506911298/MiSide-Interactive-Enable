@@ -44,12 +44,33 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         CreateInvincibleToggle();
         CreateOHKToggle();
 
-        CreateMaxwellButton();
+        CreateMemeButton();
+
+        CreateMuteToggle();
 
         Owner.Enabled = false;
     }
 
-    private void CreateMaxwellButton()
+    private void CreateMuteToggle()
+    {
+        _ = UIFactory.CreateToggle(
+           ContentRoot,
+           "MuteToggle",
+           out Toggle toggle,
+           out Text text
+       );
+        text.text = "Meme Mute";
+        toggle.isOn = Plugin.Instance.isMute.Value;
+        System.Action<bool> value = (value) =>
+        {
+            Plugin.Instance.isMute.Value = value;
+        };
+        toggle.onValueChanged.AddListener(
+            value
+        );
+    }
+
+    private void CreateMemeButton()
     {
         var memeRow = UIFactory.CreateHorizontalGroup(
             ContentRoot,
