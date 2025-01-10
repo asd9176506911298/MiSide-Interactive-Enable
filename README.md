@@ -28,5 +28,6 @@ BepInEx\config\InteractiveEnable.cfg
 ![](/img/Menu.png)
 
 https://youtu.be/XBTlN-o50sg
+https://youtu.be/PRP5G6a0_38
 
 https://www.nexusmods.com/miside/mods/83
