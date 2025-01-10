@@ -11,7 +11,7 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
 {
     public MainPanel(UIBase owner) : base(owner) { }
 
-    public override string Name => "Interactive Enable Mod";
+    public override string Name => "Interactive Enable Mod v1.0.3";
     public override int MinWidth => 300;
     public override int MinHeight => 450;
     public override Vector2 DefaultAnchorMin => new(0.25f, 0.25f);
