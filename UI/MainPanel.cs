@@ -13,7 +13,7 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
 
     public override string Name => "Interactive Enable Mod v1.0.3";
     public override int MinWidth => 300;
-    public override int MinHeight => 450;
+    public override int MinHeight => 500;
     public override Vector2 DefaultAnchorMin => new(0.25f, 0.25f);
     public override Vector2 DefaultAnchorMax => new(0.5f, 0.5f);
     public override bool CanDragAndResize => true;
@@ -48,7 +48,18 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
 
         CreateMuteToggle();
 
+        CreateDesotryMemeButton();
         Owner.Enabled = false;
+    }
+
+    private void CreateDesotryMemeButton()
+    {
+        var DestoryMemeButton = UIFactory.CreateButton(ContentRoot, "DestoryMemeButton", "Destory Meme Object", null);
+        UIFactory.SetLayoutElement(DestoryMemeButton.Component.gameObject, minHeight: 25, minWidth: 150);
+        Text DestortMemeLabel = DestoryMemeButton.Component.GetComponentInChildren<Text>();
+        DestortMemeLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        DestortMemeLabel.alignment = TextAnchor.MiddleLeft;
+        DestoryMemeButton.OnClick += () => UIManager.DestroyAllMeme();
     }
 
     private void CreateMuteToggle()
