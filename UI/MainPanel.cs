@@ -13,7 +13,7 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
 
     public override string Name => "Interactive Enable Mod v1.0.3";
     public override int MinWidth => 300;
-    public override int MinHeight => 500;
+    public override int MinHeight => 600;
     public override Vector2 DefaultAnchorMin => new(0.25f, 0.25f);
     public override Vector2 DefaultAnchorMax => new(0.5f, 0.5f);
     public override bool CanDragAndResize => true;
@@ -48,8 +48,50 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
 
         CreateMuteToggle();
 
+
         CreateDesotryMemeButton();
+
+        CreateESPToggle();
+        CreateESPLineToggle();
+
         Owner.Enabled = false;
+    }
+    private void CreateESPToggle()
+    {
+        _ = UIFactory.CreateToggle(
+            ContentRoot,
+            "isESPToggle",
+            out Toggle toggle,
+            out Text text
+        );
+        text.text = "ESPRect";
+        toggle.isOn = Plugin.Instance.isRect.Value;
+        System.Action<bool> value = (value) =>
+        {
+            Plugin.Instance.isRect.Value = value;
+        };
+        toggle.onValueChanged.AddListener(
+            value
+        );
+    }
+
+    private void CreateESPLineToggle()
+    {
+        _ = UIFactory.CreateToggle(
+            ContentRoot,
+            "isESPLineToggle",
+            out Toggle toggle,
+            out Text text
+        );
+        text.text = "ESPLine";
+        toggle.isOn = Plugin.Instance.isLine.Value;
+        System.Action<bool> value = (value) =>
+        {
+            Plugin.Instance.isLine.Value = value;
+        };
+        toggle.onValueChanged.AddListener(
+            value
+        );
     }
 
     private void CreateDesotryMemeButton()

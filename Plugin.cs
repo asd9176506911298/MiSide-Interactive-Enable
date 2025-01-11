@@ -33,6 +33,8 @@ public class Plugin : BasePlugin
     public ConfigEntry<bool> isInvincible;
     public ConfigEntry<bool> isOHK;
     public ConfigEntry<bool> isMute;
+    public ConfigEntry<bool> isRect;
+    public ConfigEntry<bool> isLine;
 
     //public bool isInteractive = false;
     //public bool isMiniGame = false;
@@ -62,6 +64,8 @@ public class Plugin : BasePlugin
         isInvincible = Config.Bind<bool>("", "IsInvincible", false, "");
         isOHK = Config.Bind<bool>("", "IsOHK", false, "");
         isMute = Config.Bind<bool>("", "IsMute", false, "");
+        isRect = Config.Bind<bool>("", "isRect", false, "");
+        isLine = Config.Bind<bool>("", "isLine", false, "");
 
         harmony.PatchAll(typeof(Patch));
 
