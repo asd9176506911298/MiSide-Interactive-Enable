@@ -25,6 +25,8 @@ namespace InteractiveEnable.UI
         public static List<GameObject> interactiveObjects = new List<GameObject>();
 
         public static UniverseLib.AssetBundle ab;
+        public static GameObject PointCameraLook = null;
+        public static MenuMita menuMita = null;
         public static bool Enabled
         {
             get => UiBase is not null and { Enabled: true };
@@ -57,6 +59,42 @@ namespace InteractiveEnable.UI
             if (Input.GetKeyDown(Plugin.Instance.ShowMenuKey.Value))
             {
                 Enabled = !Enabled;
+                PointCameraLook = GameObject.Find("MenuGame/Camera/PointCameraLook");
+                foreach (var x in GameObject.FindObjectsOfType<MenuMita>())
+                {
+                    menuMita = x;
+                    Plugin.Log.LogWarning(x);
+                }
+            }
+
+            if (Plugin.Instance.isMouse.Value)
+                menuMita.lookOnCamera = true;
+            else
+                menuMita.lookOnCamera = false;
+
+            if (PointCameraLook != null)
+            {
+                // Get the camera reference
+                Camera camera = GameObject.Find("MenuGame/Camera").GetComponent<Camera>();
+
+                // Get the mouse position in screen space
+                Vector3 mouseScreenPosition = Input.mousePosition;
+
+                // Calculate the depth: distance between camera and PointCameraLook
+                float depth = Mathf.Abs(camera.transform.position.z - PointCameraLook.transform.position.z);
+
+                // Convert the screen position to a world position using the calculated depth
+                Vector3 mouseWorldPosition = camera.ScreenToWorldPoint(
+                    new Vector3(mouseScreenPosition.x, mouseScreenPosition.y, depth)
+                );
+
+                // Set the position of PointCameraLook to the converted world position
+                PointCameraLook.transform.position = mouseWorldPosition;
+
+                // Log information using Plugin.Log.LogInfo
+                //Plugin.Log.LogInfo($"mouseScreenPosition: {mouseScreenPosition}");
+                //Plugin.Log.LogInfo($"mouseWorldPosition: {mouseWorldPosition}");
+                //Plugin.Log.LogInfo($"depth: {depth}");
             }
         }
 

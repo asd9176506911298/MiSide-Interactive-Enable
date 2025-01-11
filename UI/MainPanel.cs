@@ -49,7 +49,28 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         CreateMuteToggle();
 
         CreateDesotryMemeButton();
-        Owner.Enabled = false;
+
+        CreateLookMouseToggle();
+        Owner.Enabled = false; 
+    }
+
+    private void CreateLookMouseToggle()
+    {
+        _ = UIFactory.CreateToggle(
+            ContentRoot,
+            "LookMouseToggle",
+            out Toggle toggle,
+            out Text text
+        );
+        text.text = "LookAtMouse";
+        toggle.isOn = Plugin.Instance.isMouse.Value;
+        System.Action<bool> value = (value) =>
+        {
+            Plugin.Instance.isMouse.Value = value;
+        };
+        toggle.onValueChanged.AddListener(
+            value
+        );
     }
 
     private void CreateDesotryMemeButton()
