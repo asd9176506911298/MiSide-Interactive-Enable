@@ -14,6 +14,7 @@ using UniverseLib.UI;
 using UnityEngineInternal.Video;
 using UnityEngine.Video;
 using System.Net.Sockets;
+using System.Runtime.InteropServices.ObjectiveC;
 
 namespace InteractiveEnable.UI
 {
@@ -23,6 +24,8 @@ namespace InteractiveEnable.UI
     {
         public static List<GameObject> prefabObjects = new List<GameObject>();
         public static List<GameObject> interactiveObjects = new List<GameObject>();
+
+        public static GameObject enemyPrefab = null;
 
         public static UniverseLib.AssetBundle ab;
         public static bool Enabled
@@ -54,9 +57,74 @@ namespace InteractiveEnable.UI
 
         private static void OnUpdate()
         {
-            if (Input.GetKeyDown(Plugin.Instance.ShowMenuKey.Value))
+            if (Input.GetKeyDown(KeyCode.Z))
             {
-                Enabled = !Enabled;
+                var enemy = GameObject.Find("World/Quest/Quest 1 (Room 1 - Room 6)/Mita Maneken 1/MitaManeken 1");
+                if(enemy != null)
+                {
+                    if(enemyPrefab == null)
+                        enemyPrefab = enemy;
+                }
+
+                var e = GameObject.Instantiate(enemyPrefab, new Vector3(-12.037f, -3.6816f, -88.1799f), Quaternion.identity);
+                e.GetComponent<Mob_Maneken>().enabled = true;
+            }
+
+            foreach (var x in GameObject.FindObjectsOfType<Mob_Maneken>())
+            {
+                x.speedNav = 2f;
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                //Array emotionValues = Enum.GetValues(typeof(EmotionType));
+
+                //// Iterate through all MitaPerson objects
+                //foreach (var x in GameObject.FindObjectsOfType<MitaPerson>())
+                //{
+                //    // Randomly pick an EmotionType
+                //    EmotionType randomEmotion = (EmotionType)emotionValues.GetValue(UnityEngine.Random.Range(0, emotionValues.Length));
+
+                //    // Apply the random emotion
+                //    x.FaceEmotionType(randomEmotion);
+                //}
+                Camera mainCamera = GlobalTag.cameraPlayer.GetComponent<Camera>();
+                if (mainCamera == null)
+                {
+                    Plugin.Log.LogWarning("Main camera not found!");
+                    return;
+                }
+
+              
+
+                Vector3 centerScreenPosition = new Vector3(Screen.width / 2, Screen.height / 2, 0);
+
+                // Create a ray from the center of the screen
+                Ray ray = mainCamera.ScreenPointToRay(centerScreenPosition);
+
+                // Store hit information
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    // Log the name of the hit GameObject
+                    GameObject hitObject = hit.collider.gameObject;
+                    Plugin.Log.LogWarning($"Hit GameObject: {hitObject.name}");
+
+                    // Example: Add custom behavior to the hit object
+                    //hitObject.GetComponent<Renderer>()?.material.SetColor("_Color", Color.red);
+                    //GlobalTag.player.GetComponent<PlayerMove>().RemoveItem();
+                    if (hitObject != null)
+                    {
+                        if (hitObject.TryGetComponent<Mob_Maneken>(out var mobManeken))
+                        {
+                            // Destroy the game object if it has the Mob_Maneken component
+                            GameObject.Destroy(hitObject);
+                        }
+                    }
+                    else
+                    {
+                        Plugin.Log.LogWarning("No GameObject hit by the raycast.");
+                    }
+                }
             }
         }
 
