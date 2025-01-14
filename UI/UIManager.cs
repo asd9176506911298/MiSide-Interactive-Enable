@@ -14,6 +14,8 @@ using UniverseLib.UI;
 using UnityEngineInternal.Video;
 using UnityEngine.Video;
 using System.Net.Sockets;
+using System.Reflection;
+using System.IO;
 
 namespace InteractiveEnable.UI
 {
@@ -49,7 +51,10 @@ namespace InteractiveEnable.UI
             Panel = new(UiBase);
 
             KeyInputHandler.Instance.onUpdate += OnUpdate;
-            ab = UniverseLib.AssetBundle.LoadFromFile($"{Paths.PluginPath}/InteractiveEnable/maxwell");
+            ab = UniverseLib.AssetBundle.LoadFromFile($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/maxwell");
+            //Plugin.Log.LogError($"{Assembly.GetExecutingAssembly().Location}");
+            //Plugin.Log.LogError($"Path: {Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}");
+            //Plugin.Log.LogError($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/maxwell");
         }
 
         private static void OnUpdate()
