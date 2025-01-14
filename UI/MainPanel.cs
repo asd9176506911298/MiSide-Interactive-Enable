@@ -1,4 +1,5 @@
 ﻿using InteractiveEnable;
+using InteractiveEnable.UI;
 using Mono.Cecil;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,9 +11,9 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
 {
     public MainPanel(UIBase owner) : base(owner) { }
 
-    public override string Name => "Interactive Enable Mod v1.0.2";
+    public override string Name => "Interactive Enable Mod v1.0.3";
     public override int MinWidth => 300;
-    public override int MinHeight => 450;
+    public override int MinHeight => 500;
     public override Vector2 DefaultAnchorMin => new(0.25f, 0.25f);
     public override Vector2 DefaultAnchorMax => new(0.5f, 0.5f);
     public override bool CanDragAndResize => true;
@@ -43,7 +44,111 @@ public class MainPanel : UniverseLib.UI.Panels.PanelBase
         CreateInvincibleToggle();
         CreateOHKToggle();
 
+        CreateMemeButton();
+
+        CreateMuteToggle();
+
+        CreateDesotryMemeButton();
         Owner.Enabled = false;
+    }
+
+    private void CreateDesotryMemeButton()
+    {
+        var DestoryMemeButton = UIFactory.CreateButton(ContentRoot, "DestoryMemeButton", "Destory Meme Object", null);
+        UIFactory.SetLayoutElement(DestoryMemeButton.Component.gameObject, minHeight: 25, minWidth: 150);
+        Text DestortMemeLabel = DestoryMemeButton.Component.GetComponentInChildren<Text>();
+        DestortMemeLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        DestortMemeLabel.alignment = TextAnchor.MiddleLeft;
+        DestoryMemeButton.OnClick += () => UIManager.DestroyAllMeme();
+    }
+
+    private void CreateMuteToggle()
+    {
+        _ = UIFactory.CreateToggle(
+           ContentRoot,
+           "MuteToggle",
+           out Toggle toggle,
+           out Text text
+       );
+        text.text = "Meme Mute";
+        toggle.isOn = Plugin.Instance.isMute.Value;
+        System.Action<bool> value = (value) =>
+        {
+            Plugin.Instance.isMute.Value = value;
+        };
+        toggle.onValueChanged.AddListener(
+            value
+        );
+    }
+
+    private void CreateMemeButton()
+    {
+        var memeRow = UIFactory.CreateHorizontalGroup(
+            ContentRoot,
+            "DifficultRow",
+            false,
+            true,
+            true,
+            true,
+            2,
+            new Vector4(2, 2, 2, 2)
+        );
+        UIFactory.SetLayoutElement(
+           memeRow,
+           minHeight: 25,
+           minWidth: 200,
+           flexibleHeight: 0,
+           flexibleWidth: 999
+       );
+
+        var MaxwellButton = UIFactory.CreateButton(memeRow, "MaxwellButton", "Maxwell", null);
+        UIFactory.SetLayoutElement(MaxwellButton.Component.gameObject, minHeight: 25, minWidth: 60);
+        Text maxwellLabel = MaxwellButton.Component.GetComponentInChildren<Text>();
+        maxwellLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        maxwellLabel.alignment = TextAnchor.MiddleCenter;
+        MaxwellButton.OnClick += () => UIManager.CreateInteractiveObject("maxwell", "rotate");
+
+        var FishButton = UIFactory.CreateButton(memeRow, "FishButton", "Fish", null);
+        UIFactory.SetLayoutElement(FishButton.Component.gameObject, minHeight: 25, minWidth: 60);
+        Text fishLabel = FishButton.Component.GetComponentInChildren<Text>();
+        fishLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        fishLabel.alignment = TextAnchor.MiddleCenter;
+        FishButton.OnClick += () => UIManager.CreateInteractiveObject("fish");
+
+        var oiiaiButton = UIFactory.CreateButton(memeRow, "oiiaiButton", "oiiai", null);
+        UIFactory.SetLayoutElement(oiiaiButton.Component.gameObject, minHeight: 25, minWidth: 60);
+        Text oiiaiLabel = oiiaiButton.Component.GetComponentInChildren<Text>();
+        oiiaiLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        oiiaiLabel.alignment = TextAnchor.MiddleCenter;
+        oiiaiButton.OnClick += () => UIManager.CreateInteractiveObject("oii");
+
+        var futureButton = UIFactory.CreateButton(memeRow, "FutureButton", "Future", null);
+        UIFactory.SetLayoutElement(futureButton.Component.gameObject, minHeight: 25, minWidth: 60);
+        Text futureLabel = futureButton.Component.GetComponentInChildren<Text>();
+        futureLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        futureLabel.alignment = TextAnchor.MiddleCenter;
+        futureButton.OnClick += () => UIManager.CreateInteractiveObject("future");
+
+        var cowButton = UIFactory.CreateButton(memeRow, "CowButton", "Cow", null);
+        UIFactory.SetLayoutElement(cowButton.Component.gameObject, minHeight: 25, minWidth: 60);
+        Text cowLabel = cowButton.Component.GetComponentInChildren<Text>();
+        cowLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        cowLabel.alignment = TextAnchor.MiddleCenter;
+        cowButton.OnClick += () => UIManager.CreateInteractiveObject("cow");
+
+        var caramelldansenButton = UIFactory.CreateButton(memeRow, "caramelldansenButton", "Caramelldansen", null);
+        UIFactory.SetLayoutElement(caramelldansenButton.Component.gameObject, minHeight: 25, minWidth: 100);
+        Text caramelldansenLabel = caramelldansenButton.Component.GetComponentInChildren<Text>();
+        caramelldansenLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        caramelldansenLabel.alignment = TextAnchor.MiddleCenter;
+        caramelldansenButton.OnClick += () => UIManager.CreateInteractiveObject("caramelldansen");
+
+        var bocchiButton = UIFactory.CreateButton(memeRow, "BocchiButton", "bocchi", null);
+        UIFactory.SetLayoutElement(bocchiButton.Component.gameObject, minHeight: 25, minWidth: 60);
+        Text bocchiLabel = bocchiButton.Component.GetComponentInChildren<Text>();
+        bocchiLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+        bocchiLabel.alignment = TextAnchor.MiddleCenter;
+        bocchiButton.OnClick += () => UIManager.CreateInteractiveObject("bocchi");
     }
 
     private void CreateTVHintButton()

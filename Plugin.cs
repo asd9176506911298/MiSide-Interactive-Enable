@@ -5,10 +5,10 @@ using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using System;
 using UnityEngine;
-using UniverseLib.Config;
 using UniverseLib;
 using System.IO;
 using InteractiveEnable.UI;
+using System.Reflection;
 
 namespace InteractiveEnable;
 
@@ -32,6 +32,7 @@ public class Plugin : BasePlugin
     public ConfigEntry<bool> isOpenDoor;
     public ConfigEntry<bool> isInvincible;
     public ConfigEntry<bool> isOHK;
+    public ConfigEntry<bool> isMute;
 
     //public bool isInteractive = false;
     //public bool isMiniGame = false;
@@ -46,6 +47,7 @@ public class Plugin : BasePlugin
 #if DEBUG
         Console.OutputEncoding = System.Text.Encoding.UTF8;
 #endif
+
         //interactiveKey = Config.Bind<KeyCode>("", "InteractiveKey", KeyCode.PageUp, "");
         //miniGameKey = Config.Bind<KeyCode>("", "MiniGameKey", KeyCode.PageDown, "");
         //hardKey = Config.Bind<KeyCode>("", "HardKey", KeyCode.KeypadPlus, "");
@@ -59,6 +61,7 @@ public class Plugin : BasePlugin
         isOpenDoor = Config.Bind<bool>("", "IsOpenDoor", false, "");
         isInvincible = Config.Bind<bool>("", "IsInvincible", false, "");
         isOHK = Config.Bind<bool>("", "IsOHK", false, "");
+        isMute = Config.Bind<bool>("", "IsMute", false, "");
 
         harmony.PatchAll(typeof(Patch));
 

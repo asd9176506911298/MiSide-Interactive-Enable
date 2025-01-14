@@ -14,7 +14,7 @@
     </RestoreAdditionalProjectSources>
     <RootNamespace>InteractiveEnable</RootNamespace>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
@@ -282,6 +282,6 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;E:\Games\MiSide v0.9\BepInEx\plugins\&quot;&#xD;&#xA;" />
+    <Exec Command="copy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;E:\Games\MiSide v0.9\BepInEx\plugins\InteractiveEnable&quot;&#xD;&#xA;" />
   </Target>
 </Project>
