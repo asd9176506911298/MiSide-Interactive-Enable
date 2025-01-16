@@ -16,6 +16,8 @@ using UnityEngine.Video;
 using System.Net.Sockets;
 using System.Reflection;
 using System.IO;
+using System.Runtime.InteropServices;
+using Colorful;
 
 namespace InteractiveEnable.UI
 {
@@ -62,6 +64,89 @@ namespace InteractiveEnable.UI
             if (Input.GetKeyDown(Plugin.Instance.ShowMenuKey.Value))
             {
                 Enabled = !Enabled;
+            }
+
+            if (Input.GetKeyDown(KeyCode.F4))
+            {
+                //GameObject toClone = GameObject.FindObjectsOfType<ObjectInteractive>().First().gameObject;
+                //GameObject cloned = UnityEngine.Object.Instantiate(toClone);
+                //cloned.transform.position = GameObject.Find("World/Quests/Quest 2 Walking/DialogueQuest Mita/InteractiveMita").transform.position;
+                //Outlinable outlineable = cloned.GetComponent<Outlinable>();
+                //outlineable.OutlineTargets.Clear();
+                //Renderer bed = GameObject.Find("World/Acts/Act General/MitaPerson Mita/MayaBody").GetComponent<Renderer>();
+                //outlineable.OutlineTargets.Add(new OutlineTarget(bed, ""));
+
+                var outlineables = GameObject.FindObjectsOfType<Outlinable>(true)
+                 .Where(mat => mat.gameObject.name.Contains("Mita"))
+                 .ToArray();
+
+                if (outlineables.Length > 0)
+                {
+                    var mesh = GameObject.Find("World/Acts/Act General/MitaPerson Mita/MayaArms").GetComponent<Renderer>();
+                    OutlineTarget target = new OutlineTarget(mesh)
+                    {
+                        BoundsMode = BoundsMode.Manual,
+                        CullMode = UnityEngine.Rendering.CullMode.Off,
+                        Bounds = new Bounds(Vector3.forward, Vector3.one) { extents= Vector3.one }
+                    };
+                    outlineables[0].OutlineTargets.Add(target);
+
+                    mesh = GameObject.Find("World/Acts/Act General/MitaPerson Mita/MayaBody").GetComponent<Renderer>();
+                    target = new OutlineTarget(mesh)
+                    {
+                        BoundsMode = BoundsMode.Manual,
+                        CullMode = UnityEngine.Rendering.CullMode.Off,
+                        Bounds = new Bounds(Vector3.forward, Vector3.one) { extents = Vector3.one }
+                    };
+                    outlineables[0].OutlineTargets.Add(target);
+
+                    mesh = GameObject.Find("World/Acts/Act General/MitaPerson Mita/MayaZkns").GetComponent<Renderer>();
+                    target = new OutlineTarget(mesh)
+                    {
+                        BoundsMode = BoundsMode.Manual,
+                        CullMode = UnityEngine.Rendering.CullMode.Off,
+                        Bounds = new Bounds(Vector3.forward, Vector3.one) { extents = Vector3.one }
+                    };
+                    outlineables[0].OutlineTargets.Add(target);
+
+                    mesh = GameObject.Find("World/Acts/Act General/MitaPerson Mita/MayaEyes").GetComponent<Renderer>();
+                    target = new OutlineTarget(mesh)
+                    {
+                        BoundsMode = BoundsMode.Manual,
+                        CullMode = UnityEngine.Rendering.CullMode.Off,
+                        Bounds = new Bounds(Vector3.forward, Vector3.one) { extents = Vector3.one }
+                    };
+                    outlineables[0].OutlineTargets.Add(target);
+
+                    mesh = GameObject.Find("World/Acts/Act General/MitaPerson Mita/MayaFace").GetComponent<Renderer>();
+                    target = new OutlineTarget(mesh)
+                    {
+                        BoundsMode = BoundsMode.Manual,
+                        CullMode = UnityEngine.Rendering.CullMode.Off,
+                        Bounds = new Bounds(Vector3.forward, Vector3.one) { extents = Vector3.one }
+                    };
+                    outlineables[0].OutlineTargets.Add(target);
+
+                    mesh = GameObject.Find("World/Acts/Act General/MitaPerson Mita/MayaHead").GetComponent<Renderer>();
+                    target = new OutlineTarget(mesh)
+                    {
+                        BoundsMode = BoundsMode.Manual,
+                        CullMode = UnityEngine.Rendering.CullMode.Off,
+                        Bounds = new Bounds(Vector3.forward, Vector3.one) { extents = Vector3.one }
+                    };
+                    outlineables[0].OutlineTargets.Add(target);
+
+                    mesh = GameObject.Find("World/Acts/Act General/MitaPerson Mita/MayaTeth").GetComponent<Renderer>();
+                    target = new OutlineTarget(mesh)
+                    {
+                        BoundsMode = BoundsMode.Manual,
+                        CullMode = UnityEngine.Rendering.CullMode.Off,
+                        Bounds = new Bounds(Vector3.forward, Vector3.one) { extents = Vector3.one }
+                    };
+                    outlineables[0].OutlineTargets.Add(target);
+                }
+
+                Plugin.Log.LogWarning("Press F4");
             }
         }
 
