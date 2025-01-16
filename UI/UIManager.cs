@@ -25,6 +25,10 @@ namespace InteractiveEnable.UI
     {
         public static List<GameObject> prefabObjects = new List<GameObject>();
         public static List<GameObject> interactiveObjects = new List<GameObject>();
+        public static GameObject PlaceHide1 = null;
+        public static GameObject PlaceHide2 = null;
+        public static GameObject PlaceHide3 = null;
+        public static GameObject killer = null;
 
         public static UniverseLib.AssetBundle ab;
         public static bool Enabled
@@ -63,6 +67,30 @@ namespace InteractiveEnable.UI
             {
                 Enabled = !Enabled;
             }
+
+            if (Input.GetKeyDown(KeyCode.F4))
+            {
+                PlaceHide1 = GameObject.Find("World/Quests/Quest2 HideAndSeek/PathHint/PlaceHide 1");
+                PlaceHide1.GetComponent<Trigger_Event>().enabled = false;
+                PlaceHide2 = GameObject.Find("World/Quests/Quest2 HideAndSeek/PathHint/PlaceHide 2");
+                PlaceHide2.GetComponent<Trigger_Event>().enabled = false;
+                PlaceHide3 = GameObject.Find("World/Quests/Quest2 HideAndSeek/PathHint/PlaceHide 3");
+                PlaceHide3.GetComponent<Trigger_Event>().enabled = false;
+                killer = GameObject.Find("World/Quests/Quest2 HideAndSeek/Animation Killer/Mita/MitaPerson Mita/Armature/Hips/Spine/Chest");
+
+                GameObject.Find("World/Quests/Quest2 HideAndSeek/PathHint/HintHide").GetComponent<Location6_HintPathRing>().Play(true);
+                //GameObject.Find("World/Quests/Quest2 HideAndSeek/PathHint/HintHide/Pointer").SetActive(true);
+
+                GameObject.Find("World/Quests/Quest2 HideAndSeek/Animation Killer").GetComponent<Location6_MitaKiller>().playerExit = true;
+
+                GameObject.Find("GameController/Player/HeadPlayer/MainCamera/CameraPersons").GetComponent<Colorful.FastVignette>().enabled = false;
+
+                GameObject.Find("World/Quests/Quest2 HideAndSeek/Animation Killer/Mita/MitaPerson Mita/Armature/Hips/Spine/Chest/Right shoulder/Right arm/Right elbow/Right wrist/Right item").GetComponent<Colorful.FastVignette>().enabled = false;
+            }
+
+            PlaceHide1.transform.position = killer.transform.position;
+            PlaceHide2.transform.position = killer.transform.position;
+            PlaceHide3.transform.position = killer.transform.position;
         }
 
         public static void CreateInteractiveObject(string prefabName, string animatorName = "")
